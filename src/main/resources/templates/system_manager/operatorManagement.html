@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <title>运营人员管理</title>
+    <link rel="stylesheet" href="css/vendors.bundle.css"/>
+    <link rel="stylesheet" href="css/style.bundle.css"/>
+    <script src="js/vendors.bundle.js"></script>
+    <script src="js/scripts.bundle.js"></script>
+    <script src="js/dataTables/jquery.dataTables.min.js"></script>
+    <link rel="stylesheet" href="css/dataTables/jquery.dataTables.min.css"/>
+    <style>
+      #m_aside_left{
+        position:fixed !important;
+        height:100%;
+      }
+      .m-grid.m-grid--ver-desktop.m-grid--desktop>.m-grid__item.m-grid__item--fluid{
+        margin-left:260px;
+      }
+      .add_person{
+        position:absolute;
+        right:60px;
+        top:194px;
+      }
+    </style>
+</head>
+<body class="m-page--fluid m--skin- m-content--skin-light2 m-header--fixed m-header--fixed-mobile m-aside-left--enabled m-aside-left--skin-dark m-aside-left--offcanvas m-footer--push m-aside--offcanvas-default">
+<div class="m-grid m-grid--hor m-grid--root m-page">
+  <header class="m-grid__item    m-header "  data-minimize-offset="200" data-minimize-mobile-offset="200" >
+    <div class="m-container m-container--fluid m-container--full-height">
+      <div class="m-stack m-stack--ver m-stack--desktop">
+        <!-- BEGIN: Brand -->
+        <div class="m-stack__item m-brand  m-brand--skin-dark ">
+          <div class="m-stack m-stack--ver m-stack--general">
+            <div class="m-stack__item m-stack__item--middle m-brand__logo">
+              <a href="index.html" class="m-brand__logo-wrapper">
+
+              </a>
+            </div>
+          </div>
+        </div>
+        <!-- END: Brand -->
+        <div class="m-stack__item m-stack__item--fluid m-header-head" id="m_header_nav">
+          <!-- BEGIN: Horizontal Menu -->
+          <button class="m-aside-header-menu-mobile-close  m-aside-header-menu-mobile-close--skin-dark " id="m_aside_header_menu_mobile_close_btn">
+            <i class="la la-close"></i>
+          </button>
+          <div id="m_header_menu" class="m-header-menu m-aside-header-menu-mobile m-aside-header-menu-mobile--offcanvas  m-header-menu--skin-light m-header-menu--submenu-skin-light m-aside-header-menu-mobile--skin-dark m-aside-header-menu-mobile--submenu-skin-dark "  >
+          </div>
+          <!-- END: Horizontal Menu -->
+          <!-- BEGIN: Topbar -->
+          <div id="m_header_topbar" class="m-topbar  m-stack m-stack--ver m-stack--general">
+          </div>
+          <!-- END: Topbar -->
+        </div>
+      </div>
+    </div>
+  </header>
+  <!-- END: Header -->
+  <!-- begin::Body -->
+  <div class="m-grid__item m-grid__item--fluid m-grid m-grid--ver-desktop m-grid--desktop m-body">
+    <!-- BEGIN: Left Aside -->
+    <button class="m-aside-left-close  m-aside-left-close--skin-dark " id="m_aside_left_close_btn">
+      <i class="la la-close"></i>
+    </button>
+    <div id="m_aside_left" class="m-grid__item	m-aside-left  m-aside-left--skin-dark ">
+      <!-- BEGIN: Aside Menu -->
+      <div id="m_ver_menu" class="m-aside-menu  m-aside-menu--skin-dark m-aside-menu--submenu-skin-dark "	data-menu-vertical="true" data-menu-scrollable="false" data-menu-dropdown-timeout="500" >
+        <ul class="m-menu__nav  m-menu__nav--dropdown-submenu-arrow ">
+          <li class="m-menu__item  m-menu__item--submenu" aria-haspopup="true"  data-menu-submenu-toggle="hover">
+            <a  href="#" class="m-menu__link m-menu__toggle">
+              <span class="m-menu__link-text">
+										首页
+									</span>
+            </a>
+            <div class="m-menu__submenu">
+              <span class="m-menu__arrow"></span>
+              <ul class="m-menu__subnav">
+                <li class="m-menu__item  m-menu__item--parent" aria-haspopup="true" >
+                  <a  href="#" class="m-menu__link ">
+												<span class="m-menu__link-text">
+													首页
+												</span>
+                  </a>
+                </li>
+              </ul>
+            </div>
+          </li>
+          <li class="m-menu__item  m-menu__item--submenu" aria-haspopup="true"  data-menu-submenu-toggle="hover">
+            <a  href="#" class="m-menu__link m-menu__toggle">
+              <span class="m-menu__link-text">
+										会员管理
+									</span>
+            </a>
+            <div class="m-menu__submenu">
+              <span class="m-menu__arrow"></span>
+              <ul class="m-menu__subnav">
+                <li class="m-menu__item  m-menu__item--parent" aria-haspopup="true" >
+                  <a  href="#" class="m-menu__link ">
+												<span class="m-menu__link-text">
+													会员管理
+												</span>
+                  </a>
+                </li>
+                <li class="m-menu__item " aria-haspopup="true" >
+                  <a  href="components/base/state.html" class="m-menu__link ">
+                    <i class="m-menu__link-bullet m-menu__link-bullet--dot">
+                      <span></span>
+                    </i>
+                    <span class="m-menu__link-text">
+													正常列表
+												</span>
+                  </a>
+                </li>
+                <li class="m-menu__item " aria-haspopup="true" >
+                  <a  href="components/base/typography.html" class="m-menu__link ">
+                    <i class="m-menu__link-bullet m-menu__link-bullet--dot">
+                      <span></span>
+                    </i>
+                    <span class="m-menu__link-text">
+													禁言列表
+												</span>
+                  </a>
+                </li>
+              </ul>
+            </div>
+          </li>
+        </ul>
+      </div>
+      <!-- END: Aside Menu -->
+    </div>
+    <!-- END: Left Aside -->
+    <div class="m-grid__item m-grid__item--fluid m-wrapper">
+      <!-- BEGIN: Subheader -->
+      <!-- END: Subheader -->
+      <div class="m-content">
+        <!--Begin::Main Portlet-->
+        <div class="alert m-alert--default" role="alert"><p>运营人员管理</p></div>
+        <div class="m-portlet" style="height:1200px">
+          <div class="m-portlet__head">
+            <div class="m-portlet__head-caption">
+              <div class="m-portlet__head-title">
+                <h3 class="m-portlet__head-text">
+                  运营人员列表
+                </h3>
+              </div>
+              <span class="btn btn-primary pull-right add_person">新增运营人员</span>
+            </div>
+          </div>
+          <div class="m-portlet__body">
+            <table class="table table-bordered table-hover " id="example" width="100%">
+              <thead>
+              <tr>
+                <th>序号</th>
+                <th>用户名</th>
+                <th>最后登录时间</th>
+                <th>操作</th>
+              </tr>
+              </thead>
+              <tbody></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!--modal-->
+<div class="modal fade" id="delete" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">
+          删除运营人员
+        </h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+											<span aria-hidden="true">
+												&times;
+											</span>
+        </button>
+        <!--<div class="m-demo-icon__preview">
+          <i class="la la-close"></i>
+        </div>-->
+      </div>
+      <div class="modal-body">
+        <p>
+          您确认要删除该运营人员吗？
+        </p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary">
+          确定
+        </button>
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">
+          取消
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+</body>
+</html>
+<script>
+  $('.add_person').on('click', function () {
+    location.href = "/addOperation"
+  })
+  var t = $('#example').DataTable({
+    ajax: {
+      //指定数据源
+      url: "js/data.json"
+    },
+    "searchable": true,
+    "processing": true,
+    "ordering": true, //允许排序
+    "serverSide": false,
+    "stateSave": true,
+    "info": false,
+    "bLengthChange": true,
+    "oLanguage": { //国际语言转化
+      "sLengthMenu": "每页显示数量 _MENU_ ",
+      "sZeroRecords": "查询不到任何相关数据",
+      "sSearch": '',
+      "sEmptyTable": "暂无数据内容！",
+      "sLoadingRecords": "努力加载中...",
+      "sProcessing": "处理中...",
+      "oPaginate": {
+        "sPrevious": "上页",
+        "sNext": "下页"
+      }
+    },
+    //每页显示三条数据
+    language: {
+      "url": "js/dataTables/"
+    },
+    pageLength: 10,
+    columns: [
+      {
+        "data": "id"
+      },
+      {
+        "data": "title"
+      },
+      {
+        "data": "url"
+      },
+      {
+        "data": null
+      }
+    ],
+    "columnDefs": [{
+      // "visible": false,
+      //"targets": 0
+    },
+      {
+        "render": function (data, type, row, meta) {
+          //渲染 把数据源中的标题和url组成超链接
+          return '<a href="#" style="margin-left: 10px;margin-right: 10px">查看</a><a href="#" style="margin-right: 10px">编辑</a><a href="javascript:;" class="delete_persons">删除</a>';
+        },
+        //指定是第三列
+        "targets": 3
+      }],
+    "drawCallback": function () {
+      $('.delete_persons').each(function (i, item) {
+        $(item).on('click',function(){
+          $('#delete').modal('show')
+        })
+      });
+    },
+  });
+</script>

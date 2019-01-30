@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Title</title>
+    <link href="css/vendors.bundle.css" rel="stylesheet" type="text/css" />
+    <link href="css/style.bundle.css" rel="stylesheet" type="text/css" />
+    <link href="css/common.css" rel="stylesheet" type="text/css" />
+</head>
+
+<body class="m--skin- m-header--fixed m-header--fixed-mobile m-aside-left--enabled m-aside-left--skin-dark m-aside-left--offcanvas m-footer--push m-aside--offcanvas-default">
+<!-- begin:: Page -->
+
+<div class="m-grid m-grid--hor m-grid--root m-page">
+    <div class="m-grid__item m-grid__item--fluid m-grid m-grid--ver-desktop m-grid--desktop m-grid--tablet-and-mobile m-grid--hor-tablet-and-mobile m-login m-login--1 m-login--singin" id="m_login">
+        <div class="m-grid__item m-grid__item--fluid m-grid m-grid--center m-grid--hor m-grid__item--order-tablet-and-mobile-1	m-login__content" style="background-image: url(img/bg-3.png);background-size: 605px;">
+            <div class="m-grid__item m-grid__item--middle">
+                <h3 class="m-login__welcome">
+
+                </h3>
+                <p class="m-login__msg">
+                    <iframe scrolling="no" frameborder="0" allowtransparency="true" src="http://i.tianqi.com/index.php?c=code&id=36&icon=5&num=5"></iframe>
+
+                    <br/>
+                </p>
+            </div>
+        </div>
+        <div class="m-grid__item m-grid__item--order-tablet-and-mobile-2 m-login__aside">
+                <div class="m-stack m-stack--hor m-stack--desktop">
+                <div class="m-stack__item m-stack__item--fluid">
+                    <div class="m-login__wrapper">
+                        <div class="m-login__logo">
+                            <a href="#">
+                                <img src="img/logo-2.png" />
+                            </a>
+                        </div>
+                        <div class="m-login__signin">
+                            <div class="m-login__head">
+                                <h3 class="m-login__title">
+                                    orange
+                                </h3>
+                            </div>
+                            <form class="m-login__form m-form" action="" role="form" id="usersign">
+                                <div class="form-group m-form__group">
+                                    <input class="form-control m-input" id="login_number" type="number" placeholder="请输入账号" name="phone" autocomplete="off"/>
+                                </div>
+                                <div class="form-group m-form__group">
+                                    <input class="form-control m-input m-login__form-input--last" id="login_password" type="password" placeholder="请输入密码" name="password" autocomplete="off"/>
+                                </div>
+                                <div class="verification">账号或者密码错误</div>
+                                <div class="row m-login__form-sub">
+                                    <div class="col m--align-left">
+                                        <label class="m-checkbox m-checkbox--focus">
+                                            <input type="checkbox" name="remember" id="remember_password"  />
+                                            记住账号密码
+                                            <span></span>
+                                        </label>
+                                    </div>
+                                    <div class="col m--align-right">
+                                        <a href="javascript:;" id="m_login_forget_password" class="m-link">
+                                            忘记密码 ?
+                                        </a>
+                                    </div>
+                                </div>
+                                <div class="m-login__form-action">
+                                    <span id="m_login_signin_submit" class="btn btn-focus m-btn m-btn--pill m-btn--custom m-btn--air">
+                                        登 录
+                                    </span>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="m-login__forget-password">
+                            <div class="m-login__head">
+                                <h3 class="m-login__title">
+                                    忘记密码 ?
+                                </h3>
+
+                            </div>
+                            <form class="m-login__form m-form" id="forget_password" action="">
+                                <div class="form-group m-form__group">
+                                    <input class="form-control m-input" type="text" placeholder="请输入手机号码" name="newnumber" id="newnumber" autocomplete="off" />
+                                </div>
+                                <div class="form-group m-form__group">
+                                    <input class="form-control m-input verification_code" type="text" placeholder="验证码" maxlength="6" name="verification_code" id="verification_code"/>
+                                    <input class="click_code" value="获取验证码" type="button">
+                                </div>
+                                <div class="form-group m-form__group">
+                                    <input class="form-control m-input new_password" type="password" id="new_password" placeholder="新密码" name="new_password" />
+                                </div>
+                                <div class="form-group m-form__group">
+                                    <input class="form-control m-input confirmation_password" type="password" id="confirmation_password" placeholder="确认密码" name="confirmation_password"/>
+                                </div>
+                                <div class="m-login__form-action">
+                                    <span id="m_login_forget_password_submit" class="btn btn-focus m-btn m-btn--pill m-btn--custom m-btn--air forget_modify">
+                                        确认修改
+                                    </span>
+                                    <span id="m_login_forget_password_cancel" class="btn btn-outline-focus m-btn m-btn--pill m-btn--custom">
+                                        取消
+                                    </span>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="forget_Up">
+
+</div>
+
+</body>
+<script src="js/vendors.bundle.js" type="text/javascript"></script>
+<script src="js/scripts.bundle.js" type="text/javascript"></script>
+<script src="js/jquery.validate.min.js" type="text/javascript"></script>
+<script src="js/login.js" type="text/javascript"></script>
+
+</html>
+
+<script>
+    /* 修改密码验证*/
+    forgetValidate = function(form,rules, messages) {
+        $(form).validate({
+            rules: rules,
+            messages:messages
+        })
+    }
+
+    var forget = $('#forget_password')
+    var forget_rules = {
+        newnumber:{
+            required:true,
+            isMobile:true
+        },
+        verification_code:{
+            required:true,
+            minlength:6
+        },
+        new_password:{
+            required:true,
+            minlength:6
+        },
+        confirmation_password:{
+            required:true,
+            minlength:6,
+            equalTo:"#new_password"
+        }
+    }
+    var forget_message = {
+        newnumber:{
+            required:"手机号不能为空",
+            isMobile:"填写正确的手机号码"
+        },
+        verification_code:{
+            required:"验证码不能为空",
+            minlength:"验证码长度为6"
+        },
+        new_password:{
+            required:"密码不能为空",
+            minlength:"密码最小长度为6"
+        },
+        confirmation_password:{
+            required:"密码不能为空",
+            minlength:"密码最小长度为6",
+            equalTo:"两次密码输入不一致"
+        }
+    }
+    forgetValidate(forget,forget_rules,forget_message)
+
+    function settime(){
+        var time = 60;
+        var btn_code =  $(".click_code");
+        var end = setInterval(function() {
+            if (time == 0) {
+                btn_code.removeAttr("disabled");
+                btn_code.val("获取验证码");
+                clearInterval(end);
+            } else {
+                btn_code.attr('disabled',"true")
+                btn_code.val(time-- + " 秒后重新获取")
+            }
+        }, 1000);
+    }
+
+    $(".click_code").click(function(){
+        var codephone = $("#newnumber").val();
+        var distinguish = "WEBFORGOT";
+
+        var code_url = contextPath + '/forgotcode/' + distinguish + "/" + codephone;
+        $.ajax({
+            type: 'get',
+            url: code_url,
+            async: true,
+            contentType: 'application/json',
+            dataType: 'json',
+            processData: false,
+            success:function(data){
+                settime();
+            },
+            error:function(data){
+                $(".forget_Up").addClass("forget_down");
+                var errors = JSON.parse(data.responseText);
+                $(".forget_Up").html(errors.errors[0].message)
+                setTimeout(function(){
+                    $(".forget_Up").removeClass("forget_down");
+                    $(".forget_Up").html("");
+                },3000)
+            }
+        })
+    })
+
+    $(".forget_modify").click(function(){
+        if(!$('#forget_password').valid()){
+            return
+        }
+        var phoneval = $("#newnumber").val();
+        var codeval =  $("#verification_code").val();
+        var passwordval =  $("#new_password").val();
+        var newpasswordval =  $("#confirmation_password").val();
+        var modify = {
+            mobile:phoneval,
+            code:codeval,
+            password:passwordval,
+            newPassword:newpasswordval
+        }
+        modifyjson =JSON.stringify(modify);
+        var modify_url = contextPath + '/forgot';
+        $.ajax({
+            type: 'post',
+            data:modifyjson,
+            url: modify_url,
+            async: true,
+            contentType: 'application/json',
+            dataType: 'json',
+            processData: false,
+            success:function(data){
+                $(".forget_Up").addClass("forget_down");
+                $(".forget_Up").html("密码设置成功");
+                setTimeout(function(){
+                    $(".forget_Up").removeClass("forget_down");
+                    $(".forget_Up").html("");
+                    window.location.reload();
+                },1000)
+            },error:function(data){
+                $(".forget_Up").addClass("forget_down");
+                $(".forget_Up").html("验证码错误");
+                setTimeout(function(){
+                    $(".forget_Up").removeClass("forget_down");
+                    $(".forget_Up").html("");
+                },3000)
+            }
+        })
+    })
+
+    /* 登录验证*/
+    formValidate = function(form,rules, messages) {
+        $(form).validate({
+            rules: rules,
+            messages:messages
+        })
+    }
+
+    var login = $('#usersign')
+    var login_rules = {
+        phone:{
+            required:true,
+            isMobile:true
+        },
+        password:{
+            required:true,
+            minlength:6
+        }
+    }
+    var login_message = {
+        phone:{
+            required:"手机号不能为空",
+            isMobile:"填写正确的手机号码"
+        },
+        password:{
+            required:"密码不能为空",
+            minlength:"密码最小长度为6"
+        }
+    }
+    formValidate(login,login_rules,login_message)
+    /*登录*/
+    $('#m_login_signin_submit').on('click',function(){
+        if(!$('#usersign').valid()){
+            return
+        }
+        var name = $('#login_number').val()
+        var password = $("#login_password").val()
+        var sign = {
+            userName: name,
+            password: password,
+        }
+        sign =JSON.stringify(sign);
+        var login_url = contextPath + '/user/login';
+        $.ajax({
+            type: 'post',
+            data:sign,
+            url: login_url,
+            async: true,
+            contentType: 'application/json',
+            dataType: 'json',
+            processData: false,
+            success:function(data){
+                localStorage.setItem('keyname',name);
+                localStorage.setItem('keypass',password);
+                localStorage.setItem('keyid',data.id)
+                var ret = data.power;
+                if(ret == "0"){
+
+                    if($("#remember_password").is(':checked' +
+                            '' +
+                            '' +
+                            '')){
+                        localStorage.setItem('keybox','0')
+                    }else{
+                        localStorage.setItem('keybox','1')
+                    }
+                    location.href = 'super/index'
+                }else{
+                    if($("#remember_password").is(':checked')){
+                        localStorage.setItem('keybox','0')
+                    }else{
+                        localStorage.setItem('keybox','1')
+                    }
+                    location.href = 'system/index';
+                    localStorage.setItem('keylist',data.power);
+                }
+            },error:function(data){
+                $("#remember_password").prop('checked',false);
+                localStorage.clear();
+                $(".verification").show();
+            }
+        })
+    })
+
+    $("#login_number").keydown(function(){
+        $(".verification").hide();
+    })
+    $("#login_password").keydown(function(){
+        $(".verification").hide();
+    })
+
+$(document).ready(function(){
+    var strName = localStorage.getItem('keyname');
+    var strPass = localStorage.getItem('keypass');
+    var strBox = localStorage.getItem('keybox');
+
+    if(strBox == '0'){
+        $("#login_number").val(strName);
+        $("#login_password").val(strPass);
+        $("#remember_password").attr("checked",true)
+    }else{
+        $("#login_number").val("");
+        $("#login_password").val("");
+        $("#remember_password").attr("checked",false)
+    }
+});
+</script>

@@ -1,0 +1,109 @@
+buildscript {
+    ext {
+        springBootVersion = '2.1.2.RELEASE'
+    }
+    repositories {
+        mavenCentral()
+        maven {
+            url "https://plugins.gradle.org/m2/"
+        }
+    }
+    dependencies {
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+        classpath("org.flywaydb:flyway-gradle-plugin:5.2.4")
+        // mybatis-generator 插件路径
+        classpath "gradle.plugin.com.arenagod.gradle:mybatis-generator-plugin:1.4"
+    }
+}
+
+apply plugin: 'java'
+apply plugin: 'org.springframework.boot'
+apply plugin: 'io.spring.dependency-management'
+//引入 flyway 插件
+apply plugin: 'org.flywaydb.flyway'
+//引入 mybatis-generator 插件
+apply plugin: "com.arenagod.gradle.MybatisGenerator"
+
+
+
+group = 'com.yj2'
+version = '0.0.1-SNAPSHOT'
+sourceCompatibility = '1.8'
+
+
+
+flyway {
+    url = 'jdbc:mysql://127.0.0.1:3306/orange?useUnicode=true&characterEncoding=utf-8&useSSL=false'
+    user = 'root'
+    password = 'root'
+    schemas = ['orange']
+    encoding = 'UTF-8'
+    table = 'schema_version'
+    baselineDescription = '初始化数据库'
+    baselineOnMigrate = 'true'
+}
+repositories {
+    mavenCentral()
+    maven { url "https://repo.spring.io/milestone" }
+    
+}
+
+/*
+bootRun {
+//开启页面热加载功能
+    addResources = true
+}
+*/
+
+dependencies {
+    implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter:2.0.0'
+    runtimeOnly 'mysql:mysql-connector-java'
+    compileOnly 'org.projectlombok:lombok'
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    //mybatis-generator core 包
+    compile group: 'org.mybatis.generator', name: 'mybatis-generator-core', version:'1.3.2'
+
+    //activiti工作流
+    //compile group: 'org.activiti', name: 'activiti-spring-boot-starter-basic', version: '6.0.0'
+
+    //JSON
+    compile group: 'com.alibaba', name: 'fastjson', version: '1.2.54'
+    //json
+    compile 'net.sf.json-lib:json-lib:2.4:jdk15'
+
+    //JWT
+    compile group: 'com.auth0', name: 'java-jwt', version: '3.4.1'
+    compile group: 'org.springframework', name: 'spring-context-support', version: '5.1.3.RELEASE'
+
+    //Quartz
+    compile('org.quartz-scheduler:quartz:2.3.0')
+    compile('org.quartz-scheduler:quartz-jobs:2.3.0')
+
+    //log4j2
+    compile group: 'org.springframework.boot', name: 'spring-boot-starter-log4j2', version: '2.1.2.RELEASE'
+
+    //swagger2
+    compile group: 'io.springfox', name: 'springfox-swagger2', version: '2.2.2'
+    compile group: 'io.springfox', name: 'springfox-swagger-ui', version: '2.2.2'
+
+    //解析yml
+    compile group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.9.2'
+    compile group: 'com.fasterxml.jackson.dataformat', name: 'jackson-dataformat-yaml', version: '2.9.2'
+
+    //热部署
+    //compile ('org.springframework.boot:spring-boot-devtools')
+    
+}
+
+configurations {
+    mybatisGenerator
+    all*.exclude group: 'org.springframework.boot', module: 'spring-boot-starter-logging'
+}
+
+mybatisGenerator {
+    verbose = true
+    configFile = 'src/main/resources/generatorConfig.xml'
+}
+
