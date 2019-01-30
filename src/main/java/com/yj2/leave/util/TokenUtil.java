@@ -79,7 +79,7 @@ public final class TokenUtil {
      * @param token
      * @return user_id
      */
-    public static String getaccountIdByToken(String token) {
+    public static String getAccountIdByToken(String token) {
         Map<String, Claim> claims = getClaim(token);
         Claim user_id_claim = claims.get("account_id");
         if (null == user_id_claim || StringUtils.isEmpty(user_id_claim.asString())) {

@@ -33,7 +33,8 @@ sourceCompatibility = '1.8'
 
 
 flyway {
-    url = 'jdbc:mysql://127.0.0.1:3306/orange?useUnicode=true&characterEncoding=utf-8&useSSL=false'
+    driver = 'com.mysql.cj.jdbc.Driver'
+    url = 'jdbc:mysql://127.0.0.1:3306/orange?serverTimezone=UTC&useUnicode=true&characterEncoding=utf8&characterSetResults=utf8&useSSL=false&verifyServerCertificate=false&autoReconnct=true&autoReconnectForPools=true&allowMultiQueries=true'
     user = 'root'
     password = 'root'
     schemas = ['orange']
@@ -59,9 +60,9 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter:2.0.0'
-    runtimeOnly 'mysql:mysql-connector-java'
     compileOnly 'org.projectlombok:lombok'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    compile group: 'mysql', name: 'mysql-connector-java', version:'8.0.11'
     //mybatis-generator core 包
     compile group: 'org.mybatis.generator', name: 'mybatis-generator-core', version:'1.3.2'
 
@@ -94,6 +95,10 @@ dependencies {
 
     //热部署
     //compile ('org.springframework.boot:spring-boot-devtools')
+
+    //mybatis分页插件
+    //compile('tk.mybatis:mapper-spring-boot-starter:1.1.4')
+    //scompile('com.github.pagehelper:pagehelper-spring-boot-starter:1.2.1')
     
 }
 
