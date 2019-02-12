@@ -10,7 +10,6 @@ import java.util.Enumeration;
 
 
 @RestController
-@RequestMapping("/user_login")
 public class LoginController {
 
     @Autowired
@@ -20,7 +19,7 @@ public class LoginController {
     protected HttpSession httpSession;
 
 
-    @PostMapping("web/login")
+    @PostMapping("/web/login")
     public User userLogin(@RequestBody User user) {
         User addUserInfo = userService.userLogin(user.getAccount(),user.getPassword());
         if (addUserInfo != null) {
