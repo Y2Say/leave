@@ -9,6 +9,7 @@ import com.yj2.leave.mapper.UserMapper;
 import com.yj2.leave.service.UserService;
 import com.yj2.leave.util.EncryDigestUtil;
 import com.yj2.leave.util.TokenUtil;
+import com.yj2.leave.util.UUIDUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -16,7 +17,6 @@ import org.springframework.util.CollectionUtils;
 
 import java.util.Date;
 import java.util.List;
-import java.util.UUID;
 
 @Service("com.yj2.leave.service.impl.UserServiceImpl")
 public class UserServiceImpl implements UserService {
@@ -75,21 +75,20 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void register(String systemId, String account, String name, String role) {
+    public void register(String systemId, String account, String name, String roleId) {
         User user1 = userDefinedMapper.getUserByAccount(account);
         if(user1!=null){
             throw new ServiceException(ExceptionEnum.ACCOUNT_EXIST);
         }
-
         User user = new User();
-        user.setId(UUID.randomUUID().toString());
+        user.setId(UUIDUtil.randomString());
         user.setAccount(account);
         user.setName(name);
         user.setStatus(0);
+        user.setRoleId(roleId);
         user.setPassword(EncryDigestUtil.digest("123123"));
         user.setCreatedBy(systemId);
-
-
+        user.setCreateTime(new Date());
         userMapper.insert(user);
     }
 

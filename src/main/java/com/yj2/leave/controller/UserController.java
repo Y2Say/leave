@@ -30,18 +30,18 @@ public class UserController {
     private UserService userService;
 
     @PostMapping("/register")
-    public String register(@RequestParam("account") String account,@RequestParam("name") String name,@RequestParam("role") String role){
+    public String register(@RequestParam("account") String account,@RequestParam("name") String name,@RequestParam("roleId") String roleId){
         String token = request.getHeader("x-auth-token");
         if(StringUtils.isEmpty(token)){
             throw new ControllerException(ExceptionEnum.ERROR_TOKEN);
         }
-        if(StringUtils.isEmpty(account) || StringUtils.isEmpty(name) || StringUtils.isEmpty(role)){
+        if(StringUtils.isEmpty(account) || StringUtils.isEmpty(name) || StringUtils.isEmpty(roleId)){
             throw new ControllerException(ExceptionEnum.INFO_NULL);
         }
         HashMap<String,Object> map = new HashMap<String,Object>();
 
         String systemId = TokenUtil.getAccountIdByToken(token);
-        userService.register(systemId, account, name, role);
+        userService.register(systemId, account, name, roleId);
         map.put("message","添加成功！");
         return JSON.toJSONString(map);
     }

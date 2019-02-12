@@ -6,10 +6,10 @@ CREATE TABLE `user` (
 `status`  int(4) NULL DEFAULT NULL COMMENT '状态（0-初始化，1-正常，2-禁用）' ,
 `role_id`  varchar(64) NOT NULL COMMENT '角色ID' ,
 `salt`  varchar(225) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '盐' ,
-`created_by`  varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '创建人' ,
-`updated_by`  varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '修改人' ,
-`create_time`  timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间' ,
-`update_time`  timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间' ,
+`created_by`  varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NULL COMMENT '创建人' ,
+`updated_by`  varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NULL COMMENT '修改人' ,
+`create_time`  timestamp NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间' ,
+`update_time`  timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间' ,
 PRIMARY KEY (`id`)
 )ENGINE=InnoDB DEFAULT CHARSET=utf8
 comment '用户账号信息表';

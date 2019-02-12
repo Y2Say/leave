@@ -25,11 +25,9 @@ apply plugin: 'org.flywaydb.flyway'
 apply plugin: "com.arenagod.gradle.MybatisGenerator"
 
 
-
 group = 'com.yj2'
 version = '0.0.1-SNAPSHOT'
 sourceCompatibility = '1.8'
-
 
 
 flyway {
@@ -46,7 +44,6 @@ flyway {
 repositories {
     mavenCentral()
     maven { url "https://repo.spring.io/milestone" }
-    
 }
 
 /*
@@ -98,7 +95,7 @@ dependencies {
 
     //mybatis分页插件
     //compile('tk.mybatis:mapper-spring-boot-starter:1.1.4')
-    //scompile('com.github.pagehelper:pagehelper-spring-boot-starter:1.2.1')
+    //compile('com.github.pagehelper:pagehelper-spring-boot-starter:1.2.1')
     
 }
 
