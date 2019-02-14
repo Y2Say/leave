@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="admin/index">
+
+<body>
+<div class="content_container" th:fragment="content">
+  <div class="m-content">
+    <div class="alert m-alert&#45;&#45;default" role="alert"><p>审核详情</p></div>
+    <div class="m-portlet">
+      <div class="m-portlet__head">
+        <div class="m-portlet__head-caption">
+          <div class="m-portlet__head-title">
+            <h3 class="m-portlet__head-text">
+              数据列表
+            </h3>
+          </div>
+        </div>
+      </div>
+      <div class="m-portlet__body">
+        <table class="table table-bordered table-hover " id="audit_info" width="100%">
+          <thead>
+          <tr>
+            <th>举报日期</th>
+            <th>举报人账号</th>
+            <th>被举报用户账号</th>
+            <th>被举报帖子编号</th>
+            <th>审核结果</th>
+          </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="reportDate"></td>
+              <td class="reportNumber"></td>
+              <td class="reportedName"></td>
+              <td class="reportedNum" style="color: #4fa5ff"></td>
+              <td class="reportValid"></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div class="m-portlet">
+      <div class="m-portlet__head">
+        <div class="m-portlet__head-caption">
+          <div class="m-portlet__head-title">
+            <h3 class="m-portlet__head-text">
+              审核说明
+            </h3>
+          </div>
+        </div>
+      </div>
+      <div class="m-portlet__body">
+        <span class="audit_content"></span>
+      </div>
+    </div>
+  </div>
+</div>
+</body>
+</html>
+<script>
+  var reportNum = window.sessionStorage["reportNumber"];
+  var getUrl = contextPath + '/report/detail/' + reportNum
+  $.ajax({
+    type:"get",
+    url: getUrl,
+    dataType:'json',
+    success:function(data){
+      $('.reportDate').text(formatDate(data.createTime))
+      $('.reportNumber').text(data.account)
+      $('.reportedName').text(data.reportedAccount)
+      $('.reportedNum').text(data.postId)
+      data.auditResults == 2 ?$('.reportValid').text("无效举报"):$('.reportValid').text("有效举报")
+      $('.audit_content').html(data.operationNotes)
+    },error:function(data){
+        console.log(data)
+    }
+  })
+  $('.reportedNum').on('click',function(){
+      window.sessionStorage["postId"] = $(this).text()
+      window.open(contextPath + '/system/administration')
+  })
+  /*转换时间格式*/
+  function formatDate(date) {
+    var oDate = new Date(date),
+      oYear = oDate.getFullYear(),
+      oMonth = oDate.getMonth() + 1,
+      oDay = oDate.getDate(),
+      oHour = oDate.getHours(),
+      oMin = oDate.getMinutes(),
+      oSen = oDate.getSeconds(),
+      oTime = oYear + '-' + getzf(oMonth) + '-' + getzf(oDay) + ' ' + getzf(oHour) + ':' + getzf(oMin) + ':' + getzf(oSen);//最后拼接时间
+    return oTime;
+  };
+  //补0操作
+  function getzf(num) {
+    if (parseInt(num) < 10) {
+      num = '0' + num;
+    }
+    return num;
+  }
+</script>

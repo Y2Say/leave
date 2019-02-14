@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="admin/super">
+
+<body>
+<div class="content_container" th:fragment="content">
+  <form class="m-login__form m-form" action="" id="operate_form" role="form">
+    <div class="m-content">
+      <!--Begin::Main Portlet-->
+      <div class="alert m-alert--default" role="alert"><p>运营人员详情</p></div>
+      <div class="m-portlet">
+        <div class="m-portlet__head">
+          <div class="m-portlet__head-caption">
+            <div class="m-portlet__head-title">
+              <h3 class="m-portlet__head-text">
+                基本信息
+              </h3>
+            </div>
+          </div>
+        </div>
+        <div class="m-portlet__body">
+          <div class="form-group m-form__group row">
+            <label class="col-2 col-form-label text-right" style="color: #575962;">用户名：</label>
+            <div class="col-6 text-left">
+              <input class="form-control m-input" id="name"  type="text" value="" name="name" autocomplete="off" disabled="disabled"/>
+            </div>
+          </div>
+          <div class="form-group m-form__group row">
+            <label class="col-2 col-form-label text-right" style="color: #575962;">密码：</label>
+            <div class="col-6 text-left">
+              <input class="form-control m-input" id="password"  type="password" value="******" name="password" autocomplete="off" disabled="disabled"/>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="m-portlet">
+        <div class="m-portlet__head">
+          <div class="m-portlet__head-caption">
+            <div class="m-portlet__head-title">
+              <h3 class="m-portlet__head-text">
+                用户权限
+              </h3>
+            </div>
+          </div>
+        </div>
+        <div class="m-portlet__body">
+          <div class="m-checkbox-inline">
+            <label class="m-checkbox">
+              <input type="checkbox" value="1" disabled="disabled"/>
+              会员管理
+              <span></span>
+            </label>
+            <label class="m-checkbox">
+              <input type="checkbox" value="2" disabled="disabled"/>
+              帖子管理
+              <span></span>
+            </label>
+            <label class="m-checkbox">
+              <input type="checkbox" value="3" disabled="disabled"/>
+              举报管理
+              <span></span>
+            </label>
+            <label class="m-checkbox">
+              <input type="checkbox" value="4" disabled="disabled"/>
+              规则管理
+              <span></span>
+            </label>
+            <label class="m-checkbox">
+              <input type="checkbox" value="5" disabled="disabled"/>
+              消息管理
+              <span></span>
+            </label>
+            <label class="m-checkbox">
+              <input type="checkbox" value="6" disabled="disabled"/>
+              充值记录
+              <span></span>
+            </label>
+            <label class="m-checkbox">
+              <input type="checkbox" value="7" disabled="disabled"/>
+              系统设置
+              <span></span>
+            </label>
+          </div>
+        </div>
+      </div>
+    </div>
+  </form>
+</div>
+</body>
+</html>
+<script>
+    var elength =  $(".m-menu__subnav li a");
+    var box  = elength.eq(1);
+    setTimeout(function(){
+        box.parents("li.m-menu__item--submenu").addClass("m-menu__item--open");
+        box.parents("div.m-menu__submenu").hide();
+        box.parents("div.m-menu__submenu").slideDown();
+        box.addClass("color_show");
+    },600);
+  /*获取数据渲染数据*/
+  var operate_id = window.sessionStorage["detail"]
+  var operate_url = contextPath + "/details/" + operate_id
+  if(operate_id){
+      $.ajax({
+        type:"post",
+        url:operate_url,
+        dataType:'json',
+        success:function(data){
+          $('#name').val($(data)[0].userName)
+          $('.m-checkbox-inline').find('input').each(function(i,item){
+              for(var i=0;i<$(data)[0].power.length;i++){
+                  if($(data)[0].power[i] === $(item).val()){
+                      $(item).attr('checked','checked')
+                  }
+              }
+          })
+        },error:function(data){
+            console.log(data)
+        }
+      })
+  }
+</script>
+

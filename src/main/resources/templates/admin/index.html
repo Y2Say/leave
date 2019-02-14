@@ -1,0 +1,532 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>运营后台</title>
+</head>
+<link th:href="@{~/css/vendors.bundle.css}" rel="stylesheet" type="text/css" />
+<link th:href="@{~/css/style.bundle.css}" rel="stylesheet" type="text/css" />
+<link th:href="@{~/css/common.css}" rel="stylesheet" type="text/css" />
+
+<style>
+.m-aside-menu .m-menu__nav .m-menu__item--submenu{display: none}
+</style>
+
+<body class="m-page--fluid m--skin- m-content--skin-light2 m-header--fixed m-header--fixed-mobile m-aside-left--enabled m-aside-left--skin-dark m-aside-left--offcanvas m-footer--push m-aside--offcanvas-default"  >
+<div class="m-grid m-grid--hor m-grid--root m-page">
+
+    <!-- header 开始 -->
+    <header class="m-grid__item    m-header "  data-minimize-offset="200" data-minimize-mobile-offset="200" >
+        <div class="m-container m-container--fluid m-container--full-height">
+            <div class="m-stack m-stack--ver m-stack--desktop">
+                <!-- BEGIN: Brand -->
+                <div class="m-stack__item m-brand  m-brand--skin-dark ">
+                    <div class="m-stack m-stack--ver m-stack--general">
+                        <div class="m-stack__item m-stack__item--middle m-brand__logo">
+                            <a href="index.html" class="m-brand__logo-wrapper">
+                                <!--
+                                <img alt="" src="assets/demo/default/media/img/logo/logo_default_dark.png"/>
+                                -->
+                            </a>
+                        </div>
+                        <div class="m-stack__item m-stack__item--middle m-brand__tools">
+                            <!-- BEGIN: Left Aside Minimize Toggle -->
+                            <a href="javascript:;" id="m_aside_left_minimize_toggle" class="m-brand__icon m-brand__toggler m-brand__toggler--left m--visible-desktop-inline-block
+					 ">
+                                <span></span>
+                            </a>
+                            <!-- END -->
+                            <!-- BEGIN: Responsive Aside Left Menu Toggler -->
+                            <a href="javascript:;" id="m_aside_left_offcanvas_toggle" class="m-brand__icon m-brand__toggler m-brand__toggler--left m--visible-tablet-and-mobile-inline-block">
+                                <span></span>
+                            </a>
+                            <!-- END -->
+                            <!-- BEGIN: Responsive Header Menu Toggler -->
+
+                            <!-- END -->
+                            <!-- BEGIN: Topbar Toggler -->
+                            <a id="m_aside_header_topbar_mobile_toggle" href="javascript:;" class="m-brand__icon m--visible-tablet-and-mobile-inline-block">
+                                <i class="flaticon-more"></i>
+                            </a>
+                            <!-- BEGIN: Topbar Toggler -->
+                        </div>
+                    </div>
+                </div>
+                <!-- END: Brand -->
+                <div class="m-stack__item m-stack__item--fluid m-header-head" id="m_header_nav">
+
+                    <div id="m_header_topbar" class="m-topbar  m-stack m-stack--ver m-stack--general">
+                        <div class="m-stack__item m-topbar__nav-wrapper">
+                            <ul class="m-topbar__nav m-nav m-nav--inline">
+                                <li class="m-nav__item m-topbar__quick-actions m-topbar__quick-actions--img m-dropdown m-dropdown--large m-dropdown--header-bg-fill m-dropdown--arrow m-dropdown--align-right m-dropdown--align-push m-dropdown--mobile-full-width m-dropdown--skin-light"  data-dropdown-toggle="click">
+                                    <a href="#" class="m-nav__link m-dropdown__toggle">
+                                        <span class="m-nav__link-icon">
+                                            <img th:src="@{~/img/icon.png}">
+										</span>
+                                        <span class="text_sort">
+                                            <em class="text_sort_name"></em>
+                                            <em class="text_color">运营管理员</em>
+                                        </span>
+                                    </a>
+                                    <div class="m-dropdown__wrapper">
+                                        <span class="m-dropdown__arrow m-dropdown__arrow--right m-dropdown__arrow--adjust"></span>
+                                        <div class="m-dropdown__inner">
+                                            <a href="password">修改密码</a>
+                                            <a class="logout_login">退出登录</a>
+                                        </div>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <!-- END: Topbar -->
+                </div>
+            </div>
+        </div>
+    </header>
+    <!-- header 结束 -->
+
+    <!-- body 开始 -->
+    <div class="m-grid__item m-grid__item--fluid m-grid m-grid--ver-desktop m-grid--desktop m-body">
+
+        <div id="m_aside_left" class="m-grid__item	m-aside-left  m-aside-left--skin-dark ">
+            <div
+                    id="m_ver_menu"
+                    class="m-aside-menu  m-aside-menu--skin-dark m-aside-menu--submenu-skin-dark "
+                    data-menu-vertical="true"
+                    data-menu-scrollable="false" data-menu-dropdown-timeout="500">
+
+                <ul class="m-menu__nav  m-menu__nav--dropdown-submenu-arrow  menu_list_nav" style="color:#fff;">
+
+                    <li class="m-menu__item  m-menu__item--submenu" aria-haspopup="true"  data-menu-submenu-toggle="hover">
+                        <a  href="#" class="m-menu__link m-menu__toggle">
+                            <i class="m-menu__link-icon  fa fa-home"></i>
+                            <span class="m-menu__link-text">
+										首页
+									</span>
+                            <i class="m-menu__ver-arrow la la-angle-right"></i>
+                        </a>
+                        <div class="m-menu__submenu">
+                            <span class="m-menu__arrow"></span>
+                            <ul class="m-menu__subnav">
+                                <li class="m-menu__item " aria-haspopup="true" >
+                                    <a  href="index" class="m-menu__link ">
+                                        <i class="m-menu__link-bullet m-menu__link-bullet--dot">
+                                            <span></span>
+                                        </i>
+                                        <span class="m-menu__link-text">
+													系统首页
+												</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li class="m-menu__item  m-menu__item--submenu" aria-haspopup="true"  data-menu-submenu-toggle="hover">
+                        <a  href="#" class="m-menu__link m-menu__toggle">
+                            <i class="m-menu__link-icon fa fa-user"></i>
+                            <span class="m-menu__link-text">
+										会员管理
+									</span>
+                            <i class="m-menu__ver-arrow la la-angle-right"></i>
+                        </a>
+                        <div class="m-menu__submenu">
+                            <span class="m-menu__arrow"></span>
+                            <ul class="m-menu__subnav">
+                                <li class="m-menu__item " aria-haspopup="true">
+                                    <a  href="list" class="m-menu__link ">
+                                        <i class="m-menu__link-bullet m-menu__link-bullet--dot">
+                                            <span></span>
+                                        </i>
+                                        <span class="m-menu__link-text">
+													正常列表
+												</span>
+                                    </a>
+                                </li>
+                                <li class="m-menu__item " aria-haspopup="true" >
+                                    <a  href="disable" class="m-menu__link ">
+                                        <i class="m-menu__link-bullet m-menu__link-bullet--dot">
+                                            <span></span>
+                                        </i>
+                                        <span class="m-menu__link-text">
+													禁言列表
+												</span>
+                                    </a>
+                                </li>
+                                <li class="m-menu__item " aria-haspopup="true" style="display: none;">
+                                    <a  href="member" class="m-menu__link ">
+                                        <i class="m-menu__link-bullet m-menu__link-bullet--dot">
+                                            <span></span>
+                                        </i>
+                                        <span class="m-menu__link-text">
+													会员详情
+												</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li class="m-menu__item  m-menu__item--submenu" aria-haspopup="true"  data-menu-submenu-toggle="hover">
+                        <a  href="#" class="m-menu__link m-menu__toggle">
+                            <i class="m-menu__link-icon fa fa-file-text"></i>
+                            <span class="m-menu__link-text">
+										帖子管理
+									</span>
+                            <i class="m-menu__ver-arrow la la-angle-right"></i>
+                        </a>
+                        <div class="m-menu__submenu">
+                            <span class="m-menu__arrow"></span>
+                            <ul class="m-menu__subnav">
+                                <li class="m-menu__item " aria-haspopup="true" style="display: none">
+                                    <a  href="administration" class="m-menu__link ">
+                                        <i class="m-menu__link-bullet m-menu__link-bullet--dot">
+                                            <span></span>
+                                        </i>
+                                        <span class="m-menu__link-text">
+													帖子管理
+												</span>
+                                    </a>
+                                </li>
+                                <li class="m-menu__item " aria-haspopup="true" >
+                                    <a  href="online" class="m-menu__link ">
+                                        <i class="m-menu__link-bullet m-menu__link-bullet--dot">
+                                            <span></span>
+                                        </i>
+                                        <span class="m-menu__link-text">
+													在线帖子
+												</span>
+                                    </a>
+                                </li>
+                                <li class="m-menu__item " aria-haspopup="true" >
+                                    <a  href="shield" class="m-menu__link ">
+                                        <i class="m-menu__link-bullet m-menu__link-bullet--dot">
+                                            <span></span>
+                                        </i>
+                                        <span class="m-menu__link-text">
+													屏蔽帖子
+												</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li class="m-menu__item  m-menu__item--submenu" aria-haspopup="true"  data-menu-submenu-toggle="hover">
+                        <a  href="#" class="m-menu__link m-menu__toggle">
+                            <i class="m-menu__link-icon fa fa-warning"></i>
+                            <span class="m-menu__link-text">
+										举报管理
+									</span>
+                            <i class="m-menu__ver-arrow la la-angle-right"></i>
+                        </a>
+                        <div class="m-menu__submenu">
+                            <span class="m-menu__arrow"></span>
+                            <ul class="m-menu__subnav">
+                                <li class="m-menu__item " aria-haspopup="true" >
+                                    <a  href="report" class="m-menu__link ">
+                                        <i class="m-menu__link-bullet m-menu__link-bullet--dot">
+                                            <span></span>
+                                        </i>
+                                        <span class="m-menu__link-text">
+													举报管理
+												</span>
+                                    </a>
+                                </li>
+                                <li class="m-menu__item " aria-haspopup="true" >
+                                    <a  href="pend" class="m-menu__link ">
+                                        <i class="m-menu__link-bullet m-menu__link-bullet--dot">
+                                            <span></span>
+                                        </i>
+                                        <span class="m-menu__link-text">
+													待审核
+												</span>
+                                    </a>
+                                </li>
+                                <li class="m-menu__item " aria-haspopup="true" >
+                                    <a  href="audited" class="m-menu__link ">
+                                        <i class="m-menu__link-bullet m-menu__link-bullet--dot">
+                                            <span></span>
+                                        </i>
+                                        <span class="m-menu__link-text">
+													已审核
+												</span>
+                                    </a>
+                                </li>
+                                <li class="m-menu__item " aria-haspopup="true" style="display: none;">
+                                    <a  href="auditDetail" class="m-menu__link ">
+                                        <i class="m-menu__link-bullet m-menu__link-bullet--dot">
+                                            <span></span>
+                                        </i>
+                                        <span class="m-menu__link-text">
+													审核详情
+										/span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li class="m-menu__item  m-menu__item--submenu" aria-haspopup="true"  data-menu-submenu-toggle="hover">
+                        <a  href="#" class="m-menu__link m-menu__toggle">
+                            <i class="m-menu__link-icon fa fa-tags"></i>
+                            <span class="m-menu__link-text">
+										规则管理
+									</span>
+                            <i class="m-menu__ver-arrow la la-angle-right"></i>
+                        </a>
+                        <div class="m-menu__submenu">
+                            <span class="m-menu__arrow"></span>
+                            <ul class="m-menu__subnav">
+                                <li class="m-menu__item " aria-haspopup="true" >
+                                    <a  href="rule" class="m-menu__link ">
+                                        <i class="m-menu__link-bullet m-menu__link-bullet--dot">
+                                            <span></span>
+                                        </i>
+                                        <span class="m-menu__link-text">
+													规则管理
+												</span>
+                                    </a>
+                                </li>
+                                <li class="m-menu__item " aria-haspopup="true" >
+                                    <a  href="persona" class="m-menu__link ">
+                                        <i class="m-menu__link-bullet m-menu__link-bullet--dot">
+                                            <span></span>
+                                        </i>
+                                        <span class="m-menu__link-text">
+													个人属性规则
+												</span>
+                                    </a>
+                                </li>
+                                <li class="m-menu__item " aria-haspopup="true" >
+                                    <a  href="attribute" class="m-menu__link ">
+                                        <i class="m-menu__link-bullet m-menu__link-bullet--dot">
+                                            <span></span>
+                                        </i>
+                                        <span class="m-menu__link-text">
+													帖子属性规则
+												</span>
+                                    </a>
+                                </li>
+                                <li class="m-menu__item " aria-haspopup="true" >
+                                    <a  href="integral" class="m-menu__link ">
+                                        <i class="m-menu__link-bullet m-menu__link-bullet--dot">
+                                            <span></span>
+                                        </i>
+                                        <span class="m-menu__link-text">
+													积分生成规则
+												</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li class="m-menu__item  m-menu__item--submenu" aria-haspopup="true"  data-menu-submenu-toggle="hover">
+                        <a  href="#" class="m-menu__link m-menu__toggle">
+                            <i class="m-menu__link-icon fa fa-envelope"></i>
+                            <span class="m-menu__link-text">
+										消息管理
+									</span>
+                            <i class="m-menu__ver-arrow la la-angle-right"></i>
+                        </a>
+                        <div class="m-menu__submenu">
+                            <span class="m-menu__arrow"></span>
+                            <ul class="m-menu__subnav">
+                                <li class="m-menu__item " aria-haspopup="true" >
+                                    <a  href="message" class="m-menu__link ">
+                                        <i class="m-menu__link-bullet m-menu__link-bullet--dot">
+                                            <span></span>
+                                        </i>
+                                        <span class="m-menu__link-text">
+													消息管理
+												</span>
+                                    </a>
+                                </li>
+                                <li class="m-menu__item " aria-haspopup="true" >
+                                    <a  href="template" class="m-menu__link ">
+                                        <i class="m-menu__link-bullet m-menu__link-bullet--dot">
+                                            <span></span>
+                                        </i>
+                                        <span class="m-menu__link-text">
+													消息模板
+												</span>
+                                    </a>
+                                </li>
+                                <li class="m-menu__item " aria-haspopup="true" >
+                                    <a  href="send" class="m-menu__link ">
+                                        <i class="m-menu__link-bullet m-menu__link-bullet--dot">
+                                            <span></span>
+                                        </i>
+                                        <span class="m-menu__link-text">
+													已发消息
+												</span>
+                                    </a>
+                                </li>
+                                <li class="m-menu__item " aria-haspopup="true" style="display: none;">
+                                    <a  href="mesDetail" class="m-menu__link ">
+                                        <i class="m-menu__link-bullet m-menu__link-bullet--dot">
+                                            <span></span>
+                                        </i>
+                                        <span class="m-menu__link-text">
+													已发消息
+												</span>
+                                    </a>
+                                </li>
+
+                            </ul>
+                        </div>
+                    </li>
+                    <li class="m-menu__item  m-menu__item--submenu" aria-haspopup="true"  data-menu-submenu-toggle="hover">
+                        <a  href="#" class="m-menu__link m-menu__toggle">
+                            <i class="m-menu__link-icon fa fa-credit-card-alt"></i>
+                            <span class="m-menu__link-text">
+										充值记录
+									</span>
+                            <i class="m-menu__ver-arrow la la-angle-right"></i>
+                        </a>
+                        <div class="m-menu__submenu">
+                            <span class="m-menu__arrow"></span>
+                            <ul class="m-menu__subnav">
+                                <li class="m-menu__item " aria-haspopup="true" >
+                                    <a  href="recharge" class="m-menu__link ">
+                                        <i class="m-menu__link-bullet m-menu__link-bullet--dot">
+                                            <span></span>
+                                        </i>
+                                        <span class="m-menu__link-text">
+													充值记录
+												</span>
+                                    </a>
+                                </li>
+
+                            </ul>
+                        </div>
+                    </li>
+                    <li class="m-menu__item  m-menu__item--submenu" aria-haspopup="true"  data-menu-submenu-toggle="hover">
+                        <a  href="#" class="m-menu__link m-menu__toggle">
+                            <i class="m-menu__link-icon fa fa-cog"></i>
+                            <span class="m-menu__link-text">
+										系统设置
+									</span>
+                            <i class="m-menu__ver-arrow la la-angle-right"></i>
+                        </a>
+                        <div class="m-menu__submenu">
+                            <span class="m-menu__arrow"></span>
+                            <ul class="m-menu__subnav">
+                                <li class="m-menu__item " aria-haspopup="true" >
+                                    <a  href="settings" class="m-menu__link ">
+                                        <i class="m-menu__link-bullet m-menu__link-bullet--dot">
+                                            <span></span>
+                                        </i>
+                                        <span class="m-menu__link-text">
+													系统设置
+												</span>
+                                    </a>
+                                </li>
+                                <li class="m-menu__item " aria-haspopup="true" >
+                                    <a  href="third" class="m-menu__link ">
+                                        <i class="m-menu__link-bullet m-menu__link-bullet--dot">
+                                            <span></span>
+                                        </i>
+                                        <span class="m-menu__link-text">
+													第三方登录
+												</span>
+                                    </a>
+                                </li>
+                                <li class="m-menu__item " aria-haspopup="true" >
+                                    <a  href="sensitive" class="m-menu__link ">
+                                        <i class="m-menu__link-bullet m-menu__link-bullet--dot">
+                                            <span></span>
+                                        </i>
+                                        <span class="m-menu__link-text">
+													敏感词管理
+												</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
+
+                </ul>
+            </div>
+
+            <!-- END: Aside Menu -->
+        </div>
+        <!-- END: Left Aside -->
+        <div class="m-grid__item m-grid__item--fluid m-wrapper">
+            <!-- BEGIN: Subheader -->
+            <div class="content_container" th:include="this :: content"></div>
+        </div>
+    </div>
+    <!-- body 结束 -->
+</div>
+
+<script th:src="@{~/js/vendors.bundle.js}" type="text/javascript"></script>
+<script th:src="@{~/js/scripts.bundle.js}" type="text/javascript"></script>
+
+<script>
+
+    var keynum = localStorage.getItem("keylist");
+    $(".menu_list_nav li.m-menu__item--submenu").eq("0").show();
+    for(var i=0; i<keynum.length;i++){
+        $(".menu_list_nav li.m-menu__item--submenu").eq(keynum[i]).show();
+    }
+
+    var account = localStorage.getItem("keyname");
+    $(".text_sort_name").html(account);
+
+
+    /*".m-menu__item--submenu").addClass("m-menu__item--open"); */
+    var urlpathname = window.location.href;
+    var elength =  $(".m-menu__subnav li a");
+    for(var i=0; i<elength.length; i++){
+        if(elength[i].href == urlpathname){
+            var box  = elength.eq(i);
+            setTimeout(function(){
+                box.parents("li.m-menu__item--submenu").addClass("m-menu__item--open");
+                box.parents("div.m-menu__submenu").hide();
+                box.parents("div.m-menu__submenu").slideDown();
+                box.addClass("color_show");
+            },600);
+
+            if(i== '1'){
+                localStorage.setItem('tie',1);
+            }
+            if(i== '2'){
+                localStorage.setItem('tie',2);
+            }
+            if(i== '5'){
+                localStorage.setItem('tie',5);
+            }
+            if(i== '6'){
+                localStorage.setItem('tie',6);
+            }
+        }
+    }
+
+    $(".logout_login").click(function(){
+        var logout = contextPath + '/user/logout';
+        $.ajax({
+            type: 'get',
+            url: logout,
+            async: true,
+            contentType: 'application/json',
+            dataType: 'json',
+            processData: false,
+            success:function(data){
+                location.href = '/login';
+            },error:function(data){
+                console.log(data)
+            }
+        })
+    })
+</script>
+
+<!--dataTables-->
+<script th:src="@{~/js/dataTables/jquery.dataTables.min.js}" type="text/javascript"></script>
+<link rel="stylesheet" th:href="@{~/css/dataTables/jquery.dataTables.min.css}"/>
+
+<script th:src="@{~/js/jquery.validate.min.js}"></script>
+<script th:src="@{~/js/login.js}" type="text/javascript"></script>
+<script th:src="@{~/js/page.js}" type="text/javascript"></script>
+
+</body>
+</html>
+
+
+

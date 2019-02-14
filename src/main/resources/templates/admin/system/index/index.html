@@ -1,0 +1,743 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="admin/index">
+
+<body>
+<div class="content_container" th:fragment="content">
+  <div class="m-content">
+    <div class="alert m-alert--default" role="alert"><p>系统首页</p></div>
+    <div class="row">
+      <div class="col-sm-6 col-md-4 col-lg-3">
+        <div class="m-portlet" style="height: 150px">
+          <div class="m-portlet__body">
+            <div class="form-group m-form__group row" style="margin-bottom: 0px;font-size:12px">
+              <label class="col-12 col-form-label text-left">会员总数</label>
+            </div>
+            <div class="form-group m-form__group row" style="margin-top: -5px;">
+              <label class="col-12 col-form-label text-left totalMember" style="font-size: 24px"></label>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-sm-6 col-md-4 col-lg-3">
+        <div class="m-portlet" style="height: 150px">
+          <div class="m-portlet__body">
+            <div class="form-group m-form__group row" style="margin-bottom: 0px;font-size:12px">
+              <label class="col-12 col-form-label text-left">帖子总数</label>
+            </div>
+            <div class="form-group m-form__group row" style="margin-top: -5px;">
+              <label class="col-12 col-form-label text-left totalPost" style="font-size: 24px" ></label>
+            </div>
+            <span class="pull-right" style="position: absolute;right:40px;bottom:50px;font-size: 12px">不良贴比例：<span class="rate"></span></span>
+          </div>
+        </div>
+      </div>
+      <div class="col-sm-6 col-md-4 col-lg-3">
+        <div class="m-portlet" style="height: 150px">
+          <div class="m-portlet__body">
+            <div class="form-group m-form__group row" style="margin-bottom: 0px;font-size:12px">
+              <label class="col-12 col-form-label text-left">可分配奖励积分</label>
+            </div>
+            <div class="form-group m-form__group row" style="margin-top: -5px;">
+              <label class="col-12 col-form-label text-left allotPoint" style="font-size: 24px">24234423</label>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-sm-6 col-md-4 col-lg-3">
+        <div class="m-portlet" style="height: 150px">
+          <div class="m-portlet__body">
+            <div class="form-group m-form__group row" style="margin-bottom: 0px;font-size:12px">
+              <label class="col-12 col-form-label text-left">预留积分</label>
+            </div>
+            <div class="form-group m-form__group row" style="margin-top: -5px;">
+              <label class="col-12 col-form-label text-left reservePoint" style="font-size: 24px">2425634423</label>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-sm-6 col-md-4 col-lg-3">
+        <div class="m-portlet" style="height: 150px">
+          <div class="m-portlet__body">
+            <div class="form-group m-form__group row" style="margin-bottom: 0px;font-size:12px">
+              <label class="col-12 col-form-label text-left">可用赞力池积分</label>
+            </div>
+            <div class="form-group m-form__group row" style="margin-top: -5px;">
+              <label class="col-12 col-form-label text-left praisePoint" style="font-size: 24px">1231312</label>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-sm-6 col-md-4 col-lg-3">
+        <div class="m-portlet" style="height: 150px">
+          <div class="m-portlet__body">
+            <div class="form-group m-form__group row" style="margin-bottom: 0px;font-size:12px">
+              <label class="col-12 col-form-label text-left">当前所有帖赞力值合计</label>
+            </div>
+            <div class="form-group m-form__group row" style="margin-top: -5px;">
+              <label class="col-12 col-form-label text-left totalPraise" style="font-size: 24px">2423423423</label>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-sm-6 col-md-4 col-lg-3">
+        <div class="m-portlet" style="height: 150px">
+          <div class="m-portlet__body">
+            <div class="form-group m-form__group row" style="margin-bottom: 0px;font-size:12px">
+              <label class="col-12 col-form-label text-left">累计充值金额（元）</label>
+            </div>
+            <div class="form-group m-form__group row" style="margin-top: -5px;">
+              <label class="col-12 col-form-label text-left totalReward" style="font-size: 24px">24,234,423.00</label>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-sm-6 col-md-4 col-lg-3">
+        <div class="m-portlet" style="height: 150px">
+          <div class="m-portlet__body">
+            <div class="form-group m-form__group row" style="margin-bottom: 0px;font-size:12px">
+              <label class="col-12 col-form-label text-left">奖金池调整系数T</label>
+            </div>
+            <div class="form-group m-form__group row" style="margin-top: -5px;">
+              <label class="col-12 col-form-label text-left rewardRatio" style="font-size: 24px">2425634423</label>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="m-portlet">
+      <div class="m-portlet__head">
+        <div class="m-portlet__head-caption">
+          <div class="m-portlet__head-title">
+            <h3 class="m-portlet__head-text">
+              新增会员统计
+            </h3>
+          </div>
+        </div>
+      </div>
+      <div class="m-portlet__body" style="padding-top:0px;padding-bottom: 0px">
+        <div class="row">
+          <div class="col-3" style="border-right: 1px solid #ebedf2">
+            <p class="add_title"></p>
+            <p class="add_num" style="font-size: 24px"></p>
+            <p>同比上周<span class="img_arrow"></span><span class="add_Rate"></span></p>
+          </div>
+          <div class="col-9">
+            <div class="content-top" style="padding-top:10px">
+              <select class="form-control m-bootstrap-select m_selectpicker" name="count" id="count" style="opacity: 1;width:30%">
+                <option value="0">近一周统计(按天显示)</option>
+                <option value="1">近一个月统计(按天显示)</option>
+                <option value="2">近三个月统计(按天显示)</option>
+                <option value="3">近一年统计(按月显示)</option>
+                <option value="4">全部时间(按月显示)</option>
+              </select>
+            </div>
+            <div class="content-bottom" style="padding-top:60px">
+              <div id="main" style="width: 100%;height:400px;"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="m-portlet">
+      <div class="m-portlet__head">
+        <div class="m-portlet__head-caption">
+          <div class="m-portlet__head-title">
+            <h3 class="m-portlet__head-text">
+              新增帖子统计
+            </h3>
+          </div>
+        </div>
+      </div>
+      <div class="m-portlet__body" style="padding-top:0px;padding-bottom: 0px">
+        <div class="row">
+          <div class="col-3" style="border-right: 1px solid #ebedf2">
+            <p class="add_postTitle"></p>
+            <p class="add_postNum" style="font-size: 24px"></p>
+            <p>同比上周<span class="img_post_arrow"></span><span class="add_postRate"></span></p>
+          </div>
+          <div class="col-9">
+            <div class="content-top" style="padding-top:10px">
+              <select class="form-control m-bootstrap-select m_selectpicker" name="post_count" id="post_count" style="opacity: 1;width:30%">
+                <option value="p0">近一周统计(按天显示)</option>
+                <option value="p1">近一个月统计(按天显示)</option>
+                <option value="p2">近三个月统计(按天显示)</option>
+                <option value="p3">近一年统计(按月显示)</option>
+                <option value="p4">全部时间(按月显示)</option>
+              </select>
+            </div>
+            <div class="content-bottom" style="padding-top:60px">
+              <div id="post" style="width: 100%;height:400px;"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="m-portlet">
+      <div class="m-portlet__head">
+        <div class="m-portlet__head-caption">
+          <div class="m-portlet__head-title">
+            <h3 class="m-portlet__head-text">
+              活跃会员数统计
+            </h3>
+          </div>
+        </div>
+      </div>
+      <div class="m-portlet__body" style="padding-top:0px;padding-bottom: 0px">
+        <div class="row">
+          <div class="col-3" style="border-right: 1px solid #ebedf2">
+            <p class="add_memberTitle"></p>
+            <p class="member_num" style="font-size: 24px"></p>
+            <p>同比上周<span class="img_member_arrow"></span><span class="member_Rate"></span></p>
+          </div>
+          <div class="col-9">
+            <div class="content-top" style="padding-top:10px">
+              <select class="form-control m-bootstrap-select m_selectpicker" name="member_count" id="member_count" style="opacity: 1;width:30%">
+                <option value="m0">近一周统计(按天显示)</option>
+                <option value="m1">近一个月统计(按天显示)</option>
+                <option value="m2">近三个月统计(按天显示)</option>
+                <option value="m3">近一年统计(按月显示)</option>
+                <option value="m4">全部时间(按月显示)</option>
+              </select>
+            </div>
+            <div class="content-bottom" style="padding-top:60px">
+              <div id="member" style="width: 100%;height:400px;"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="m-portlet">
+      <div class="m-portlet__head">
+        <div class="m-portlet__head-caption">
+          <div class="m-portlet__head-title">
+            <h3 class="m-portlet__head-text">
+              结算奖金统计
+            </h3>
+          </div>
+        </div>
+      </div>
+      <div class="m-portlet__body" style="padding-top:0px;padding-bottom: 0px">
+        <div class="row">
+          <div class="col-3" style="border-right: 1px solid #ebedf2">
+            <p class="add_rewardTitle"></p>
+            <p class="add_rewardNum" style="font-size: 24px"></p>
+            <p>同比上周<span class="img_reward_arrow"></span><span class="reward_rate"></span></p>
+          </div>
+          <div class="col-9">
+            <div class="content-top" style="padding-top:10px">
+              <select class="form-control m-bootstrap-select m_selectpicker" name="reward_count" id="reward_count" style="opacity: 1;width:30%">
+                <option value="r0">近一周统计(按天显示)</option>
+                <option value="r1">近一个月统计(按天显示)</option>
+                <option value="r2">近三个月统计(按天显示)</option>
+                <option value="r3">近一年统计(按月显示)</option>
+                <option value="r4">全部时间(按月显示)</option>
+              </select>
+            </div>
+            <div class="content-bottom" style="padding-top:60px">
+              <div id="reward" style="width: 100%;height:400px;"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="m-portlet">
+      <div class="m-portlet__head">
+        <div class="m-portlet__head-caption">
+          <div class="m-portlet__head-title">
+            <h3 class="m-portlet__head-text">
+              第三方结算统计
+            </h3>
+          </div>
+        </div>
+      </div>
+      <div class="m-portlet__body" style="padding-top:0px;padding-bottom: 0px">
+        <div class="row">
+          <div class="col-3" style="border-right: 1px solid #ebedf2">
+            <p>本周第三方结算</p>
+            <p style="font-size: 24px">100</p>
+            <p>同比上周<img src="/img/arrow_top.png" style="width: 36px;height:36px">12%</p>
+          </div>
+          <div class="col-9">
+            <div class="content-top" style="padding-top:10px">
+              <select class="form-control m-bootstrap-select m_selectpicker" name="third_count" id="third_count" style="opacity: 1;width:30%">
+                <option value="t0">近一周统计(按天显示)</option>
+                <option value="t1">近一个月统计(按天显示)</option>
+                <option value="t2">近三个月统计(按天显示)</option>
+                <option value="t3">近一年统计(按月显示)</option>
+                <option value="t4">全部时间(按月显示)</option>
+              </select>
+            </div>
+            <div class="content-bottom" style="padding-top:60px">
+              <div id="third_list" style="width: 100%;height:400px;"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script th:src="@{~/js/echarts.simple.min.js}"></script>
+</div>
+</body>
+</html>
+<script>
+  /*渲染头部列表*/
+  function call(dom,url,num){
+    $.ajax({
+      type: 'get',
+      url: url,
+      async: false,
+      contentType: 'application/json',
+      dataType: 'json',
+      processData: false,
+      success:function(data){
+        if(num == 1){
+          $(dom).html(data)
+        }else{
+          $(dom).html(format(data))
+        }
+      },error:function(data){
+        console.log(data)
+      }
+    })
+  }
+  function postFnc(dom1,dom2,url){
+    $.ajax({
+      type: 'get',
+      url: url,
+      async: false,
+      contentType: 'application/json',
+      dataType: 'json',
+      processData: false,
+      success:function(data){
+        $(dom1).html(data.postCount)
+        $(dom2).html(data.percent)
+      },error:function(data){
+        console.log(data)
+      }
+    })
+  }
+  /*会员总数*/
+  var memberUrl = contextPath + '/associator/total/user_count'
+  var mem_num =1
+  call($('.totalMember'),memberUrl,mem_num)
+  /*帖子总数*/
+  var postUrl = contextPath + '/post/total/post_count'
+  postFnc($('.totalPost'),$('.rate'),postUrl)
+  /*可分配奖励积分*/
+  var allotUrl = contextPath + '/home/distributable_reward_integral'
+  call($('.allotPoint'),allotUrl)
+  /*预留积分*/
+  var reserveUrl = contextPath + '/home/reserved_integral'
+  call($('.reservePoint'),reserveUrl)
+  /*可用赞力池积分*/
+  var praiseUrl = contextPath + '/home/usable_praise_pool_integral'
+  call($('.praisePoint'),praiseUrl)
+  /*当前所有帖赞力值合计*/
+  var allPraiseUrl = contextPath + '/home/all_the_value_of_the_praise'
+  call($('.totalPraise'),allPraiseUrl)
+  /*累计充值金额（元）*/
+  var rewardUrl = contextPath + ''
+  //call($('.totalReward'),rewardUrl)
+  /*奖金池调整系数T*/
+  var ratioUrl = contextPath + '/home/adjustment_coefficient_of_gold_pool'
+  call($('.rewardRatio'),ratioUrl)
+  /*图表*/
+  var myChart = echarts.init(document.getElementById('main'));
+  var post = echarts.init(document.getElementById('post'));
+  var member = echarts.init(document.getElementById('member'));
+  var reward = echarts.init(document.getElementById('reward'));
+  var third_list = echarts.init(document.getElementById('third_list'));
+  var attr = [100, 102, 150, 184, 240, 280, 320]
+  var date = ['周一','周二','周三','周四','周五','周六','周日']
+  /*新增会员统计*/
+  function Num_count(url,dateList,valueList,type){
+    $.ajax({
+      type: 'get',
+      url: url,
+      async: false,
+      contentType: 'application/json',
+      dataType: 'json',
+      processData: false,
+      success:function(data){
+        var List = data.list
+        if(type == 1){
+            $('.add_num').html(data.totalCount)
+            if(data.percent >= 0){
+                $('.img_arrow').append(`<img src="/img/arrow_top.png" width="36" height="36">`)
+                $('.add_Rate').html(data.percent+'%')
+            }else if(data.percent == '--'){
+              $('.add_Rate').html(data.percent)
+              $('.add_Rate').addClass("distance_left")
+            }else{
+                $('.img_arrow').append(`<img src="/img/arrow_bottom.png" width="36" height="36">`)
+                var dataPercent = String(data.percent)
+                dataPercent = dataPercent.replace(/-/,'')
+                $('.add_Rate').html(dataPercent+'%')
+            }
+        }
+        if(type == 2){
+            $('.add_postNum').html(data.totalCount)
+            if(data.percent >= 0){
+              $('.img_post_arrow').append(`<img src="/img/arrow_top.png" width="36" height="36">`)
+              $('.add_postRate').html(data.percent+'%')
+            }else if(data.percent == '--'){
+              $('.add_postRate').html(data.percent)
+              $('.add_postRate').addClass("distance_left")
+            }else{
+              $('.img_post_arrow').append(`<img src="/img/arrow_bottom.png" width="36" height="36">`)
+              var data_postPercent = String(data.percent)
+              data_postPercent = data_postPercent.replace(/-/,'')
+              $('.add_postRate').html(data_postPercent+'%')
+            }
+        }
+        if(type == 3){
+          $('.member_num').html(data.totalCount)
+          if(data.percent >= 0){
+            $('.img_member_arrow').append(`<img src="/img/arrow_top.png" width="36" height="36">`)
+            $('.member_Rate').html(data.percent+'%')
+          }else if(data.percent == '--'){
+            $('.member_Rate').html(data.percent)
+            $('.member_Rate').addClass("distance_left")
+          }else{
+            $('.img_member_arrow').append(`<img src="/img/arrow_bottom.png" width="36" height="36">`)
+            var data_memberPercent = String(data.percent)
+            data_memberPercent = data_memberPercent.replace(/-/,'')
+            $('.member_Rate').html(data_memberPercent+'%')
+          }
+        }
+        if(type == 4){
+            $('.add_rewardNum').html(data.totalCount)
+            if(data.percent >= 0){
+              $('.img_reward_arrow').append(`<img src="/img/arrow_top.png" width="36" height="36">`)
+              $('.reward_rate').html(data.percent+'%')
+            }else if(data.percent == '--'){
+              $('.reward_rate').html(data.percent)
+              $('.reward_rate').addClass("distance_left")
+            }else{
+              $('.img_reward_arrow').append(`<img src="/img/arrow_bottom.png" width="36" height="36">`)
+              var data_ratePercent = String(data.percent)
+              data_ratePercent = data_ratePercent.replace(/-/,'')
+              $('.reward_rate').html(data_ratePercent+'%')
+            }
+        }
+        $(List).each(function(i,item){
+          dateList.push(item.showTime)
+          valueList.push(item.newCount)
+        })
+
+      },error:function(data){
+        console.log(data)
+      }
+    })
+  }
+  /*会员统计*/
+  function render(dom,x_data,y_data,time_scale){
+    option = {
+      xAxis : [
+        {
+          type : 'category',
+          boundaryGap : false,
+          data : x_data,
+          axisLabel: {
+            interval: time_scale
+          }
+        }
+      ],
+      yAxis : [
+        {
+          type : 'value'
+        }
+      ],
+      series : [
+        {
+          name:'直接访问',
+          type:'line',
+          stack: '总量',
+          smooth:true,
+          label: {
+            normal: {
+              show: true,
+              position: 'top'
+            }
+          },
+          areaStyle: {normal: {}},
+          data: y_data
+        },
+
+      ]
+    };
+    dom.setOption(option);
+  }
+  function render_add(){
+    var search = 1 //某一种类型搜索条件
+    var count_numUrl = contextPath + '/associator_line_chart/' + search
+    var dateList = []
+    var valueList = []
+    var num = 0
+    var type = 1 //判断是什么类型统计
+    $('.add_title').html("近一周新增会员数量")
+    Num_count(count_numUrl,dateList,valueList,type)
+    render(myChart,dateList,valueList,num)
+  }
+  render_add()
+  /*新增会员*/
+  function render_post(){
+    var  search = 1
+    var count_numUrl = contextPath + '/post_line_chart/' + search
+    var dateList = []
+    var valueList = []
+    var type = 2
+    var num = 0
+    $('.add_postTitle').html("近一周新增帖子数量")
+    Num_count(count_numUrl,dateList,valueList,type)
+    render(post,dateList,valueList,num)
+  }
+  render_post()
+  /*新增帖子*/
+  function render_reward(){
+    var  search = 1
+    var count_numUrl = contextPath + '/home/reward_line_chart/' + search
+    var dateList = []
+    var valueList = []
+    var type = 4
+    var num = 0
+    $('.add_rewardTitle').html("近一周结算奖金数量")
+    Num_count(count_numUrl,dateList,valueList,type)
+    render(reward,dateList,valueList,num)
+  }
+  render_reward()
+  /*结算奖金*/
+  function render_member(){
+    var  search = 1
+    var count_numUrl = contextPath + '/home/active_line_chart/' + search
+    var dateList = []
+    var valueList = []
+    var type = 3
+    var num = 0
+    $('.add_memberTitle').html("近一周活跃数量")
+    Num_count(count_numUrl,dateList,valueList,type)
+    render(member,dateList,valueList,num)
+  }
+  render_member()
+  /*活跃会员*/
+  render(third_list,date,attr)
+  /*新增会员更改查看条件*/
+  $('#count').on('change',function(){
+    $('.img_arrow').html('')
+    var search = null
+    var type = 1 //判断是什么类型统计
+    var num = null //横轴时间刻度
+    if($(this).val() == 0){
+      search = 1
+      num = 0
+      $('.add_title').html("近一周新增会员数量")
+      var count_numUrl = contextPath + '/associator_line_chart/' + search
+      var dateList = []
+      var valueList = []
+      Num_count(count_numUrl,dateList,valueList,type)
+      render(myChart,dateList,valueList,num)
+    }else if($(this).val() == 1){
+      search = 2
+      num = 6
+      $('.add_title').html("近一月新增会员数量")
+      var count_numUrl = contextPath + '/associator_line_chart/' + search
+      var dateList = []
+      var valueList = []
+      Num_count(count_numUrl,dateList,valueList,type)
+      render(myChart,dateList,valueList,num)
+    }else if($(this).val() == 2){
+      search = 3
+      num = 13
+      $('.add_title').html("近三个月新增会员数量")
+      var count_numUrl = contextPath + '/associator_line_chart/' + search
+      var dateList = []
+      var valueList = []
+      Num_count(count_numUrl,dateList,valueList,type)
+      render(myChart,dateList,valueList,num)
+    }else if($(this).val() == 3){
+      search = 4
+      num = 0
+      $('.add_title').html("近一年新增会员数量")
+      var count_numUrl = contextPath + '/associator_line_chart/' + search
+      var dateList = []
+      var valueList = []
+      Num_count(count_numUrl,dateList,valueList,type)
+      render(myChart,dateList,valueList,num)
+    }else if($(this).val() == 4){
+      search = 5
+      num = 11
+      $('.add_title').html("所有新增会员数量")
+      var count_numUrl = contextPath + '/associator_line_chart/' + search
+      var dateList = []
+      var valueList = []
+      Num_count(count_numUrl,dateList,valueList,type)
+      render(myChart,dateList,valueList,num)
+    }
+  })
+  /*新增帖子更改查看条件*/
+  $('#post_count').on('change',function(){
+    $('.img_post_arrow').html('')
+    var search = null
+    var num = null
+    var type = 2 //判断是什么类型统计
+    if($(this).val() == "p0"){
+      search = 1
+      num = 0
+      $('.add_postTitle').html("近一周新增帖子数量")
+      var count_numUrl = contextPath + '/post_line_chart/' + search
+      var dateList = []
+      var valueList = []
+      Num_count(count_numUrl,dateList,valueList,type)
+      render(post,dateList,valueList,num)
+    }else if($(this).val() == "p1"){
+      search = 2
+      num = 6
+      $('.add_postTitle').html("近一个月新增帖子数量")
+      var count_numUrl = contextPath + '/post_line_chart/' + search
+      var dateList = []
+      var valueList = []
+      Num_count(count_numUrl,dateList,valueList,type)
+      render(post,dateList,valueList,num)
+    }else if($(this).val() == "p2"){
+      search = 3
+      num = 13
+      $('.add_postTitle').html("近三个月新增帖子数量")
+      var count_numUrl = contextPath + '/post_line_chart/' + search
+      var dateList = []
+      var valueList = []
+      Num_count(count_numUrl,dateList,valueList,type)
+      render(post,dateList,valueList,num)
+    }else if($(this).val() == "p3"){
+      search = 4
+      num = 0
+      $('.add_postTitle').html("近一年新增帖子数量")
+      var count_numUrl = contextPath + '/post_line_chart/' + search
+      var dateList = []
+      var valueList = []
+      Num_count(count_numUrl,dateList,valueList,type)
+      render(post,dateList,valueList,num)
+    }else if($(this).val() == "p4"){
+      search = 5
+      num = 11
+      $('.add_postTitle').html("所有新增帖子数量")
+      var count_numUrl = contextPath + '/post_line_chart/' + search
+      var dateList = []
+      var valueList = []
+      Num_count(count_numUrl,dateList,valueList,type)
+      render(post,dateList,valueList,num)
+    }
+  })
+  /*结算奖金*/
+  $('#reward_count').on('change',function(){
+    $('.img_reward_arrow').html('')
+    var search = null
+    var num = null
+    var type = 4 //判断是什么类型统计
+    if($(this).val() == "r0"){
+      search = 1
+      num = 0
+      $('.add_rewardTitle').html("近一周结算奖金数量")
+      var count_numUrl = contextPath + '/home/reward_line_chart/' + search
+      var dateList = []
+      var valueList = []
+      Num_count(count_numUrl,dateList,valueList,type)
+      render(reward,dateList,valueList,num)
+    }else if($(this).val() == "r1"){
+      search = 2
+      num = 6
+      $('.add_rewardTitle').html("近一个月结算奖金数量")
+      var count_numUrl = contextPath + '/home/reward_line_chart/' + search
+      var dateList = []
+      var valueList = []
+      Num_count(count_numUrl,dateList,valueList,type)
+      render(reward,dateList,valueList,num)
+    }else if($(this).val() == "r2"){
+      search = 3
+      num = 13
+      $('.add_rewardTitle').html("近三个月结算奖金数量")
+      var count_numUrl = contextPath + '/home/reward_line_chart/' + search
+      var dateList = []
+      var valueList = []
+      Num_count(count_numUrl,dateList,valueList,type)
+      render(reward,dateList,valueList,num)
+    }else if($(this).val() == "r3"){
+      search = 4
+      num = 0
+      $('.add_rewardTitle').html("近一年结算奖金数量")
+      var count_numUrl = contextPath + '/home/reward_line_chart/' + search
+      var dateList = []
+      var valueList = []
+      Num_count(count_numUrl,dateList,valueList,type)
+      render(reward,dateList,valueList,num)
+    }else if($(this).val() == "r4"){
+      search = 5
+      num = 11
+      $('.add_rewardTitle').html("所有结算奖金数量")
+      var count_numUrl = contextPath + '/home/reward_line_chart/' + search
+      var dateList = []
+      var valueList = []
+      Num_count(count_numUrl,dateList,valueList,type)
+      render(reward,dateList,valueList,num)
+    }
+  })
+  /*活跃会员*/
+  $('#member_count').on('change',function(){
+    $('.img_member_arrow').html('')
+    var search = null
+    var num = null
+    var type = 3 //判断是什么类型统计
+    if($(this).val() == "m0"){
+      search = 1
+      num = 0
+      $('.add_memberTitle').html("近一周活跃会员数量")
+      var count_numUrl = contextPath + '/home/active_line_chart/' + search
+      var dateList = []
+      var valueList = []
+      Num_count(count_numUrl,dateList,valueList,type)
+      render(member,dateList,valueList,num)
+    }else if($(this).val() == "m1"){
+      search = 2
+      num = 6
+      $('.add_memberTitle').html("近一个月活跃会员数量")
+      var count_numUrl = contextPath + '/home/active_line_chart/' + search
+      var dateList = []
+      var valueList = []
+      Num_count(count_numUrl,dateList,valueList,type)
+      render(member,dateList,valueList,num)
+    }else if($(this).val() == "m2"){
+      search = 3
+      num = 13
+      $('.add_memberTitle').html("近三个月活跃会员数量")
+      var count_numUrl = contextPath + '/home/active_line_chart/' + search
+      var dateList = []
+      var valueList = []
+      Num_count(count_numUrl,dateList,valueList,type)
+      render(member,dateList,valueList,num)
+    }else if($(this).val() == "m3"){
+      search = 4
+      num = 0
+      $('.add_memberTitle').html("近一年活跃会员数量")
+      var count_numUrl = contextPath + '/home/active_line_chart/' + search
+      var dateList = []
+      var valueList = []
+      Num_count(count_numUrl,dateList,valueList,type)
+      render(member,dateList,valueList,num)
+    }else if($(this).val() == "m4"){
+      search = 5
+      num = 11
+      $('.add_memberTitle').html("所有活跃会员数量")
+      var count_numUrl = contextPath + '/home/active_line_chart/' + search
+      var dateList = []
+      var valueList = []
+      Num_count(count_numUrl,dateList,valueList,type)
+      render(member,dateList,valueList,num)
+    }
+  })
+  function format (num) {
+    return (num.toFixed(2) + '').replace(/\d{1,3}(?=(\d{3})+(\.\d*)?$)/g, '$&,');
+  }
+</script>

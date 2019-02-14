@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="admin/index">
+
+<body onload="">
+<div class="content_container" th:fragment="content">
+    <div class="m-content">
+        <!--Begin::Main Portlet-->
+        <div class="alert m-alert--default" role="alert"><p></p></div>
+        <div class="m-portlet">
+            <div class="m-portlet__head">
+                <div class="m-portlet__head-caption">
+                    <div class="m-portlet__head-title theme_header">
+                       <img src="/img/icon.png">
+                        <div class="theme_name">
+                            <span></span>
+                            <span></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="m-portlet__body">
+                   <div class="theme_main">
+                       <div class="theme_sample">
+                           <div class="backing" style="display: none;">主题帖编号:<a class="motif" data-href=""></a>；父级帖编号<a class="parent" data-href=""></a></div>
+                           <div class="post_details">
+                               <div class="post_Return">
+
+                               </div>
+                               <p class="post_text_main"></p>
+                           </div>
+
+                           <div class="theme_nav"  style="display:none">
+                            <div class="theme_list">
+                             <ul class="theme_ulimg" id="theme_ulimg">
+
+                             </ul>
+                            </div>
+
+                             <div class="m-demo-icon__preview img_left">
+                                   <i class="la la-angle-left"></i>
+                             </div>
+                              <div class="m-demo-icon__preview img_right">
+                                   <i class="la la-angle-right"></i>
+                              </div>
+                           </div>
+                           <video width="600" height="" class="video" controls="controls"  style="display:none">
+                               <source src="" type="video/mp4">
+                           </video>
+                           <div class="operation">
+                               <div class="distribution">
+                                 <div class="stepon">
+                                        <div class="m-demo-icon__preview">
+                                          <i class="fa fa-thumbs-o-down"></i>
+                                        </div>
+                                        被踩
+                                        <span class="tread"></span>
+                                  </div>
+                                   <div class="thumbs">
+                                       <div class="m-demo-icon__preview">
+                                           <i class="fa fa-thumbs-o-up"></i>
+                                       </div>
+                                       点赞
+                                       <span class="fabulous"></span>
+                                   </div>
+                                </div>
+                                <div class="information">
+                                    <div class="m-demo-icon__preview">
+                                       <i class="fa fa-tag"></i>
+                                    </div>
+                                    <span class="text_tag"></span>
+                                </div>
+                           </div>
+                       </div>
+
+                       <div class="content">
+                           <div class="content_list">
+                               <a>全部评论<span class="replyCount">100</span></a>
+                               <a>赞力值<span class="Praiseforce">1000</span></a>
+                           </div>
+                           <div class="content_order">
+                               <ul id="content_order">
+
+                               </ul>
+                               <div id="page" class="page_div"></div>
+                           </div>
+
+                           <div class="content_order" style="display: none;">
+                               <ul id="content_fab">
+
+                               </ul>
+                               <div id="page1" class="page_div"></div>
+                           </div>
+
+                       </div>
+
+                   </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="show_bg"></div>
+    <div class="show_main">
+        <div class="m-demo-icon__preview show_close">
+            <i class="la la-close"></i>
+        </div>
+        <img>
+    </div>
+</div>
+</body>
+</html>
+
+<script>
+    var tie_nub = localStorage.getItem("tie");
+    var elength =  $(".m-menu__subnav li a");
+    var box  = elength.eq(tie_nub);
+    setTimeout(function(){
+        box.parents("li.m-menu__item--submenu").addClass("m-menu__item--open");
+        box.parents("div.m-menu__submenu").hide();
+        box.parents("div.m-menu__submenu").slideDown();
+        box.addClass("color_show");
+    },600);
+
+
+
+/* 主题帖基本信息 */
+var postid = localStorage.getItem('postId');
+var post_url = contextPath + '/post/basic/info/' + postid;
+
+$.ajax({
+    type: 'get',
+    url: post_url,
+    async: false,
+    contentType: 'application/json',
+    dataType: 'json',
+    processData: false,
+    success:function(data){
+        console.log(data)
+        if(data.parentId == "0"){
+            if(data.imageType == "0"){
+                $(".theme_nav").show();
+                for(var i=0; i<data.imagerId.length; i++){
+                    $("#theme_ulimg").append('<li><img src=" '+/download/+''+ data.imagerId[i]+ '"></li>');
+                }
+            }
+            if(data.imageType != "0"){
+                $(".video").show();
+                $(".video").prop("src",'/'+ data.videoId)
+            }
+            $(".m-alert--default p").html("主题帖详情")
+            $(".post_details").css("margin","-15px")
+            $(".post_details").show();
+            if(data.profitType == "0"){
+                $(".post_Return").html("公益帖")
+            }
+            if(data.profitType == "1"){
+                $(".post_Return").html("100%积分")
+            }
+            if(data.profitType == "2"){
+                $(".post_Return").html("收益方式：50%积分+50赞力")
+            }
+            $(".fabulous").html(data.likesNum);
+            $(".tread").html(data.treadNum);
+            $(".post_text_main").html(data.text);
+        }else{
+            $(".m-alert--default p").html("回复贴详情");
+            $(".backing").show();
+            $(".backing a.motif").html(data.subPostId);
+            $(".backing a.motif").attr("data-href",data.subPostId);
+            $(".backing a.parent").html(data.parentId);
+            $(".backing a.parent").attr("data-href",data.parentId);
+            $(".theme_nav").hide();
+            $(".video").hide();
+            $(".information").html("");
+            $(".post_text_main").html(data.text)
+            $(".fabulous").html(data.likesNum);
+            $(".tread").html(data.treadNum);
+        }
+
+        var posttimes = data.createTime;
+        var Dtime = new Date(parseInt(posttimes));
+        var Y = Dtime.getFullYear() + '-';
+        var M = (Dtime.getMonth()+1 < 10 ? '0'+(Dtime.getMonth()+1) : Dtime.getMonth()+1) + '-';
+        var D = Dtime.getDate() + ' ';
+        var h = Dtime.getHours() + ':';
+        var m = Dtime.getMinutes() + ':';
+        var s = Dtime.getSeconds();
+        $(".theme_name span").eq("0").html(data.nickName);
+        $(".theme_name span").eq("1").html(Y+M+D+h+m+s);
+    },error:function(data){
+        console.log(data)
+    }
+})
+
+window.onload = function(){
+
+            var imglength = $("#theme_ulimg li");
+            $("#theme_ulimg").css("width",175*(imglength.length-1) + 160 + "px");
+            $("#theme_ulimg li:last").css("margin-right", 0)
+            var theme_width = $(".theme_list").width();
+            var img_width = $("#theme_ulimg").width();
+            if(img_width>theme_width){
+                $(".img_left").fadeIn();
+                $(".img_right").fadeIn();
+            }else{
+                $(".img_left").fadeOut();
+                $(".img_right").fadeOut();
+            }
+
+        window.onresize = function(){
+            var theme_width = $(".theme_list").width();
+            var img_width = $("#theme_ulimg").width();
+            if(img_width>theme_width){
+                $(".img_left").fadeIn();
+                $(".img_right").fadeIn();
+            }else{
+                $(".img_left").fadeOut();
+                $(".img_right").fadeOut();
+                $("#theme_ulimg").css("left",0+"px");
+            }
+        }
+
+        $(".la-angle-left").click(function(){
+            var theme_width = $(".theme_list").width();
+            var img_width = $("#theme_ulimg").width();
+            var left_ab = $("#theme_ulimg").position().left;
+            if(img_width>theme_width){
+                if(img_width-theme_width >left_ab){
+                    if(left_ab >= "-175"){
+                        $("#theme_ulimg").css("left",0+"px");
+                    }else{
+                        $("#theme_ulimg").css("left",left_ab+175 +"px");
+                    }
+                }else{
+                    if(left_ab >= "0"){
+                        $("#theme_ulimg").css("left",0+"px");
+                    }else{
+                        $("#theme_ulimg").css("left",left_ab+175 +"px");
+                    }
+                }
+            }
+        })
+
+        $(".la-angle-right").click(function(){
+            var theme_width = $(".theme_list").width();
+            var img_width = $("#theme_ulimg").width();
+            var left_ab = $("#theme_ulimg").position().left;
+            if(img_width>theme_width){
+                if(img_width-theme_width >left_ab){
+                    if(theme_width-left_ab+160 >= img_width){
+                        $("#theme_ulimg").css("left",theme_width-img_width + "px");
+                    }else{
+                        $("#theme_ulimg").css("left",left_ab-175 +"px");
+                    }
+                }
+            }
+
+        })
+
+
+         $("#theme_ulimg li").click(function(){
+              var imgsrc = $(this).find("img").attr("src");
+              $(".show_bg").fadeIn();
+              $(".show_main").find("img").attr("src",imgsrc)
+              $(".show_main").slideDown();
+          })
+
+        $(".show_close").click(function(){
+            $(".show_bg").fadeOut();
+            $(".show_main").slideUp();
+        })
+
+       $(".content_list a").each(function(e){
+           $(this).click(function(){
+              $(".content_order").hide();
+              $(".content_order").eq(e).fadeIn();
+           })
+       })
+
+
+    $(".motif").click(function(){
+        var postnum = $(this).attr("data-href");
+        localStorage.setItem('postId',postnum);
+        window.open( '/system/administration');
+    })
+    $(".parent").click(function(){
+        var parentnum = $(this).attr("data-href");
+        localStorage.setItem('postId',parentnum);
+        window.open( '/system/administration');
+    })
+}
+
+/* 全部评论 默认显示ajaxTest第一条 */
+ajaxTest(1);
+function ajaxTest(num) {
+    var postid = localStorage.getItem('postId');
+    var page = num-1;
+    var post_url = contextPath + '/post/reply/list/' + postid + '/' + page;
+    $.ajax({
+        type: 'get',
+        url: post_url,
+        async: false,
+        dataType: 'json',
+        processData: false,
+        contentType: 'application/json',
+        success: function(data) {
+            $(".replyCount").html(data.replyCount)
+            var list  = '';
+            for(var i=0;i<data.replyList.length;i++){
+                var listtime = data.replyList[i].createTime;
+                var listtime = new Date(parseInt(listtime));
+                var Y = listtime.getFullYear() + '-';
+                var M = (listtime.getMonth()+1 < 10 ? '0'+(listtime.getMonth()+1) : listtime.getMonth()+1) + '-';
+                var D = listtime.getDate() + ' ';
+                var h = listtime.getHours() + ':';
+                var m = listtime.getMinutes() + ':';
+                var s = listtime.getSeconds();
+
+                list +='<li><a class="img_order"><img src="/img/icon.png"></a>';
+                list +='<div class="content_odetails"><h5>' + data.replyList[i].nickName + '</h5><div class="content_reply">';
+                list +='回复<span class="span1">' + data.replyList[i].postName + '</span><span class="span2">:</span>' + data.replyList[i].text + '';
+                list +='</div><p>'+ Y+M+D+h+m+s +'</p></div></li>';
+            };
+            document.getElementById('content_order').innerHTML = list;
+            $("#page").paging({
+                pageNo: num,
+                totalPage: Math.ceil((data.replyCount)/10),
+                totalSize: data.replyCount,
+                callback: function(num) {
+                    ajaxTest(num);
+                }
+            })
+
+        }
+    })
+}
+
+/* 赞力值 */
+ajaxFab(1);
+function ajaxFab(num) {
+    var postid = localStorage.getItem('postId');
+    var page = num-1;
+    var post_url = contextPath + '/post/likes_value/list/' + postid + '/' + page;
+    $.ajax({
+        type: 'get',
+        url: post_url,
+        async: false,
+        dataType: 'json',
+        processData: false,
+        contentType: 'application/json',
+        success: function(data) {
+            console.log(data)
+            $(".Praiseforce").html(data.allLikesValue)
+            var list  = '';
+            for(var i=0;i<data.likesValueList.length;i++){
+                var createtime = data.likesValueList[i].createTime;
+                var fabtime = new Date(parseInt(createtime));
+                var Y = fabtime.getFullYear() + '-';
+                var M = (fabtime.getMonth()+1 < 10 ? '0'+(fabtime.getMonth()+1) : fabtime.getMonth()+1) + '-';
+                var D = fabtime.getDate() + ' ';
+                var h = fabtime.getHours() + ':';
+                var m = fabtime.getMinutes() + ':';
+                var s = fabtime.getSeconds();
+
+                list +='<li><a class="img_order"><img src="/img/icon.png"></a>';
+                list +='<div class="content_odetails"><h5>' + data.likesValueList[i].nickName + '</h5><div class="content_reply">';
+
+                if(data.likesValueList[i].operateType == "0"){
+                    list +='踩了<span class="span1">' + data.likesValueList[i].postName + '</span><span class="span2">:</span>失去' + data.likesValueList[i].likesValue + '赞力值';
+                }
+                if(data.likesValueList[i].operateType == "1"){
+                    list +='赞了<span class="span1">' + data.likesValueList[i].postName + '</span><span class="span2">:</span>获得' + data.likesValueList[i].likesValue + '赞力值';
+                }
+                list +='</div><p>'+ Y+M+D+h+m+s +'</p></div></li>';
+            };
+            document.getElementById('content_fab').innerHTML = list;
+            $("#page1").paging({
+                pageNo: num,
+                totalPage: Math.ceil((data.likesCount)/10),
+                totalSize: data.likesCount,
+                callback: function(num) {
+                    ajaxTest(num);
+                }
+            })
+
+        }
+    })
+}
+
+
+
+</script>
+
+
+
+

@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="admin/index">
+
+<body>
+<div class="content_container" th:fragment="content">
+  <div class="m-content">
+    <div class="alert m-alert&#45;&#45;default" role="alert"><p>个人属性规则</p></div>
+    <div class="m-portlet">
+      <div class="m-portlet__head">
+        <div class="m-portlet__head-caption" style="position: relative">
+          <div class="m-portlet__head-title">
+            <h3 class="m-portlet__head-text">
+              单贴奖金PR-post reward
+            </h3>
+          </div>
+          <img th:src="@{~/img/fix.png}" width="36" height="36" style="position: absolute;right:0;top:20px;cursor: pointer" class="reward_fix">
+        </div>
+      </div>
+      <div class="m-portlet__body">
+        <div class="form-group m-form__group row">
+          <label class="col-2 col-form-label text-right">计算公式：</label>
+          <div class="col-10 col-form-label text-left">
+            <span>IF(RP≥Total-vp），PR=单个贴赞力值合集/R ，<span style="color: #4fa5ff">R=<span class="R_value"></span></span>，(初始参数：R（单贴奖金调整系数）=100)；</span>
+          </div>
+        </div>
+        <div class="form-group m-form__group row">
+          <label class="col-2 col-form-label text-right"></label>
+          <div class="col-10 col-form-label text-left">
+            <span>IF（RP＜Total-vp &（Total-vp/R≤RP），PR=截止时间点总奖金池金额RP-reward pool*单个贴赞力值合集（Net-VP）/所有贴赞力值合集（Total-VP）／R  ；</span>
+          </div>
+        </div>
+        <div class="form-group m-form__group row">
+          <label class="col-2 col-form-label text-right"></label>
+          <div class="col-10 col-form-label text-left">
+            <span>IF（RP＜Total-vp &（Total-vp/R＞RP），PR=截止时间点总奖金池金额RP-reward pool*单个贴赞力值合集（Net-VP）/所有贴赞力值合集（Total-VP）／（R*T），T=Total-VP/10/RP；</span>
+          </div>
+        </div>
+        <div class="form-group m-form__group row">
+          <label class="col-2 col-form-label text-right"></label>
+          <div class="col-10 col-form-label text-left">
+            <span>单贴赞力值合集（不能为负数）=Σ单贴个人（点赞）赞力值-Σ单贴个人（踩）赞力值。单贴赞力值合计小于0时，取0；</span>
+          </div>
+        </div>
+        <div class="form-group m-form__group row">
+          <label class="col-2 col-form-label text-right"></label>
+          <div class="col-10 col-form-label text-left">
+            <span>单贴个人赞力\踩值=点赞（踩）时vp*点赞（踩）时pw*vw；</span>
+          </div>
+        </div>
+        <div class="form-group m-form__group row">
+          <label class="col-2 col-form-label text-right"></label>
+          <div class="col-10 col-form-label text-left">
+            <span>所有贴赞力值合集=统计截止时间点前7天相同时间点至统计截止时间点内未结算赞力值合计；</span>
+          </div>
+        </div>
+        <div class="form-group m-form__group row">
+          <label class="col-2 col-form-label text-right"></label>
+          <div class="col-10 col-form-label text-left">
+            <span>发帖人奖金AR-Auther reward=PR*0.75；</span>
+          </div>
+        </div>
+        <div class="form-group m-form__group row">
+          <label class="col-2 col-form-label text-right"></label>
+          <div class="col-10 col-form-label text-left">
+            <span>每个点赞人单贴助力奖励VCR-voter curation reward（V(1~n))=PR*0.25*点赞人平方根曲线比例；</span>
+          </div>
+        </div>
+        <div class="form-group m-form__group row">
+          <label class="col-2 col-form-label text-right"></label>
+          <div class="col-10 col-form-label text-left">
+            <span>每个点赞人平方根曲线比例（点赞人1~n）=（√Σ点赞人（1~n）赞力值-√Σ点赞人（n-1）赞力值）/Σ（√Σ点赞人（1~n）赞力值-√Σ点赞人（n-1）赞力值）*100%;</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!--回复奖金-->
+    <div class="m-portlet">
+      <div class="m-portlet__head">
+        <div class="m-portlet__head-caption">
+          <div class="m-portlet__head-title">
+            <h3 class="m-portlet__head-text">
+              回复奖金CMR-comment reward
+            </h3>
+          </div>
+        </div>
+      </div>
+      <div class="m-portlet__body">
+        <div class="form-group m-form__group row">
+          <label class="col-2 col-form-label text-right">计算公式：</label>
+          <div class="col-10 col-form-label text-left">
+            <span>IF(RP≥Total-vp），PR=单个贴回复赞力值合集/R，<span style="color: #4fa5ff">R=<span class="Rvalue"></span></span>,(初始参数：R（单贴奖金调整系数）=100)；</span>
+          </div>
+        </div>
+        <div class="form-group m-form__group row">
+          <label class="col-2 col-form-label text-right"></label>
+          <div class="col-10 col-form-label text-left">
+            <span>IF（RP＜Total-vp &（Total-vp/R≤RP），PR=截止时间点总奖金池金额RP-reward pool*单个贴回复赞力值合集（Net-VP）/所有贴赞力值合集（Total-VP）／R；</span>
+          </div>
+        </div>
+        <div class="form-group m-form__group row">
+          <label class="col-2 col-form-label text-right"></label>
+          <div class="col-10 col-form-label text-left">
+            <span>IF（RP＜Total-vp &（Total-vp/R＞RP），PR=截止时间点总奖金池金额RP-reward pool*单个贴回复赞力值合集（Net-VP）/所有贴赞力值合集（Total-VP）／（R*T），T=Total-VP/10/RP；</span>
+          </div>
+        </div>
+        <div class="form-group m-form__group row">
+          <label class="col-2 col-form-label text-right"></label>
+          <div class="col-10 col-form-label text-left">
+            <span>单贴回复赞力值合集（不能为负数）=Σ单贴个人回复（点赞）赞力值-Σ单贴个人回复（踩）赞力值；</span>
+          </div>
+        </div>
+        <div class="form-group m-form__group row">
+          <label class="col-2 col-form-label text-right"></label>
+          <div class="col-10 col-form-label text-left">
+            <span>回复人奖金CTR-commenter reward=CMR*0.75;</span>
+          </div>
+        </div>
+        <div class="form-group m-form__group row">
+          <label class="col-2 col-form-label text-right"></label>
+          <div class="col-10 col-form-label text-left">
+            <span>每个回复点赞人助力奖励CCR-commnet curation reward=CMR*0.25*平方根曲线比例;</span>
+          </div>
+        </div>
+        <div class="form-group m-form__group row">
+          <label class="col-2 col-form-label text-right"></label>
+          <div class="col-10 col-form-label text-left">
+            <span>每个回复点赞人平方根曲线比例（点赞人1~n）=（√Σ点赞人（1~n）赞力值-√Σ点赞人（n-1）赞力值）/Σ（√Σ点赞人（1~n）赞力值-√Σ点赞人（n-1）赞力值）*100%；</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!--单贴声望值-->
+    <div class="m-portlet">
+      <div class="m-portlet__head">
+        <div class="m-portlet__head-caption">
+          <div class="m-portlet__head-title">
+            <h3 class="m-portlet__head-text">
+              单贴声望值
+            </h3>
+          </div>
+        </div>
+      </div>
+      <div class="m-portlet__body">
+        <div class="form-group m-form__group row">
+          <label class="col-2 col-form-label text-right">计算公式：</label>
+          <div class="col-10 col-form-label text-left">
+            <span>单贴声望值合集（允许负数）=Σ单贴个人（点赞）赞力值-Σ单贴个人（踩）赞力值</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!--modal-->
+  <div class="modal fade" id="reward_modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">
+            设置参数
+          </h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+											<span aria-hidden="true">
+												&times;
+											</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <form id="reward_form" name="reward_form">
+            <div class="form-group m-form__group row" style="height:60px">
+              <label class="col-2 col-form-label text-right">R：</label>
+              <div class="col-4 col-form-label text-left">
+                <input class="form-control m-input" id="R_name"  type="text" name="R_name" autocomplete="off"/>
+              </div>
+            </div>
+            <div class="form-group m-form__group row" style="padding-left:40px;">
+              <p>输入10倍数的正整数（最大为10000）</p>
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-primary sure">
+            确定
+          </button>
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">
+            取消
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</body>
+</html>
+<script>
+  function R_render(){
+      var R_Url = contextPath + '/home/settlement_config'
+      $.ajax({
+        type: 'get',
+        url: R_Url,
+        success:function(data){
+          $('.Rvalue').html(data)
+          $('.R_value').html(data)
+        },error:function(data){
+          console.log(data)
+        }
+
+      })
+  }
+  R_render()
+  /*验证*/
+  formValidate = function(form,rules, messages) {
+    $(form).validate({
+      rules: rules,
+      messages:messages
+    })
+  }
+  var reward_form = $('#reward_form')
+  var reward_rules = {
+    R_name:{
+      required:true
+    },
+  }
+  var reward_message = {
+    R_name:{
+      required:"请填写参数",
+    }
+  }
+  formValidate(reward_form,reward_rules,reward_message)
+  $('.reward_fix').on('click',function(){
+      $('#reward_modal').modal('show')
+      $('#R_name').val($('.R_value').html())
+  })
+  $('.sure').on('click',function(){
+    if(!$('#reward_form').valid()){
+      return
+    }
+    var val = $('#R_name').val()
+    var reg = new RegExp("^(\\d|[1-9]\\d{0,4}|10000)$");
+    var reg_num =/^[+-]?(\d){1,}0$/
+    if(val != '' && val != '1'){
+      if(!reg.test(val) || !reg_num.test(val) || val > 10000){
+        alert("请输入10倍数的整数，最大为10000");
+        $('#R_name').val('')
+        return
+      }
+    }
+    if(val == $('.R_value').html()){
+        $('#reward_modal').modal('hide')
+        return
+    }
+    var R_val = parseInt($('#R_name').val())
+    var post_url = contextPath + '/home/settlement_config'
+    var param = {
+        r : R_val
+    }
+    $.ajax({
+      type: 'post',
+      url: post_url,
+      data: param,
+      contentType: 'application/x-www-form-urlencoded',
+      success:function(data){
+        $('.R_value').html($('#R_name').val())
+        $('.Rvalue').html($('#R_name').val())
+        $('#reward_modal').modal('hide')
+      },error:function(data){
+          console.log(data)
+      }
+    })
+  })
+</script>
+

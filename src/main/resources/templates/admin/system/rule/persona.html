@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="admin/index">
+
+<body>
+<div class="content_container" th:fragment="content">
+  <div class="m-content">
+    <div class="alert m-alert&#45;&#45;default" role="alert"><p>个人属性规则</p></div>
+    <div class="row">
+      <div class="col-md-6">
+        <div class="m-portlet">
+          <div class="m-portlet__head">
+            <div class="m-portlet__head-caption" style="position: relative">
+              <div class="m-portlet__head-title">
+                <h3 class="m-portlet__head-text">
+                  声望等级RL(reputation level)
+                </h3>
+              </div>
+              <img th:src="@{~/img/fix.png}" width="36" height="36" style="position: absolute;right:0;top:20px;cursor: pointer" class="prestige_fix">
+            </div>
+          </div>
+          <div class="m-portlet__body">
+            <div class="form-group m-form__group row">
+              <label class="col-4 col-form-label text-left">计算公式(根据声望值计算等级)：</label>
+              <div class="col-6 col-form-label text-left">
+                <span>RL=max(loga(abs(RC))-X,0)*((RC>= 0)?1:-1)*Y+Z</span>
+              </div>
+            </div>
+            <div class="form-group m-form__group row">
+              <label class="col-4 col-form-label text-right"></label>
+              <div class="col-6 col-form-label text-left">
+                <span> 参数：a、x、y、z；</span>
+              </div>
+            </div>
+            <div class="form-group m-form__group row">
+              <label class="col-4 col-form-label text-right"></label>
+              <div class="col-8 col-form-label text-left modify_level">
+                <span style="color: #4fa5ff;">当前设置：a=<span class="a_value"></span>、x=<span class="x_value"></span>、y=<span class="y_value"></span>、z=<span class="z_value"></span></span><span>（初始参数：a=6、x=5、y=8、z=1）</span>
+              </div>
+            </div>
+            <div class="form-group m-form__group row">
+              <label class="col-5 col-form-label text-left">计算公式（根据等级计算对应声望值）</label>
+              <div class="col-6 col-form-label text-left">
+                <span> </span>
+              </div>
+            </div>
+            <div class="form-group m-form__group row">
+              <div class="col-12 col-form-label text-left">
+                <span> 1.IF RL≤0   ，RC=a的(((ABS(RL)+(z+1))/y)+x)次方，计算结果加负号注：次方为整数时，声望值+1。次方非整数时，声望值取整数</span>
+              </div>
+            </div>
+            <div class="form-group m-form__group row">
+              <div class="col-12 col-form-label text-left">
+                <span> 2.IF 1≤RL＜z   ，RC=a的(((ABS(RL)-(z+2*n))/y)+x)次方，n=z-RL，计算结果加负号注：次方为整数时，声望值+1。次方非整数时，声望值取整数</span>
+              </div>
+            </div>
+            <div class="form-group m-form__group row">
+              <div class="col-12 col-form-label text-left">
+                <span> 3.IF RL≥z   ，RC=a的(((ABS(RL)-z))/y)+x)次方，RL=z时，计算结果加负号。注：次方为非整数时，声望值取整数+1。次方为整数时，声望值取整。</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="m-portlet">
+          <div class="m-portlet__head">
+            <div class="m-portlet__head-caption">
+              <div class="m-portlet__head-title">
+                <h3 class="m-portlet__head-text">
+                  声望值RC(reputation score)
+                </h3>
+              </div>
+            </div>
+          </div>
+          <div class="m-portlet__body">
+            <div class="form-group m-form__group row">
+              <label class="col-2 col-form-label text-right">计算公式：</label>
+              <div class="col-10 col-form-label text-left">
+                <span>RC=Σ帖子当前声望值（赞和踩）+Σ帖子点赞获得声望值奖励；</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-6">
+        <div class="m-portlet">
+          <div class="m-portlet__head">
+            <div class="m-portlet__head-caption" style="position: relative;">
+              <div class="m-portlet__head-title">
+                <h3 class="m-portlet__head-text">
+                  能量PW(power)
+                </h3>
+              </div>
+              <img th:src="@{~/img/fix.png}" width="36" height="36" style="position: absolute;right:0;top:20px;cursor: pointer" class="power_fix">
+            </div>
+          </div>
+          <div class="m-portlet__body">
+            <div class="form-group m-form__group row">
+              <label class="col-2 col-form-label text-right">计算公式：</label>
+              <div class="col-10 col-form-label text-left">
+                <span>PW=当前PW-当前PW*x%</span>
+              </div>
+            </div>
+            <div class="form-group m-form__group row">
+              <label class="col-2 col-form-label text-right">能量恢复：</label>
+              <div class="col-10 col-form-label text-left">
+                <span>从最后点赞（踩）时间开始，每天（24小时）恢复Y点，按秒恢复；</span>
+              </div>
+            </div>
+            <div class="form-group m-form__group row">
+              <label class="col-2 col-form-label text-right"></label>
+              <div class="col-10 col-form-label text-left">
+                <span style="color: #4fa5ff;">当前设置:X=<span class="power_x"></span>、Y=<span class="power_y"></span>%(天)</span><span>（初始参数:X=5,Y=50%(天）)</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="m-portlet">
+          <div class="m-portlet__head">
+            <div class="m-portlet__head-caption">
+              <div class="m-portlet__head-title">
+                <h3 class="m-portlet__head-text">
+                  积分PT(point)
+                </h3>
+              </div>
+            </div>
+          </div>
+          <div class="m-portlet__body">
+            <div class="form-group m-form__group row">
+              <label class="col-2 col-form-label text-right">计算公式：</label>
+              <div class="col-10 col-form-label text-left">
+                <span>当前积分=已结算主题帖奖励合计+已结算回复贴奖励合计+已结算点赞奖励合计+注册赠送积分+现金购买积分+举报送积分-第三方兑换</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!--modal-->
+  <div class="modal fade" id="prestige_modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">
+            设置参数
+          </h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+											<span aria-hidden="true">
+												&times;
+											</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <form id="prestige" name="prestige">
+            <div class="form-group m-form__group row" style="height:60px">
+              <label class="col-2 col-form-label text-right">a：</label>
+              <div class="col-4 col-form-label text-left">
+                <input class="form-control m-input" id="a_name"  type="text" name="a_name" autocomplete="off"/>
+              </div>
+            </div>
+            <div class="form-group m-form__group row" style="height:60px">
+              <label class="col-2 col-form-label text-right">x：</label>
+              <div class="col-4 col-form-label text-left">
+                <input class="form-control m-input" id="x_name"  type="text" name="x_name" autocomplete="off"/>
+              </div>
+            </div>
+            <div class="form-group m-form__group row" style="height:60px">
+              <label class="col-2 col-form-label text-right">y：</label>
+              <div class="col-4 col-form-label text-left">
+                <input class="form-control m-input" id="y_name"  type="text" name="y_name" autocomplete="off"/>
+              </div>
+            </div>
+            <div class="form-group m-form__group row" style="height:60px">
+              <label class="col-2 col-form-label text-right">z：</label>
+              <div class="col-4 col-form-label text-left">
+                <input class="form-control m-input" id="z_name"  type="text" name="z_name" autocomplete="off"/>
+              </div>
+            </div>
+            <div class="form-group m-form__group row" style="padding-left:40px;">
+              <p>输入1-100的正整数</p>
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-primary sure">
+            确定
+          </button>
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">
+            取消
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!--modal-->
+  <div class="modal fade" id="power_modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="power_exampleModalLabel">
+            设置参数
+          </h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+											<span aria-hidden="true">
+												&times;
+											</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <form id="power" name="power">
+            <div class="form-group m-form__group row" style="height:60px">
+              <label class="col-2 col-form-label text-right">X：</label>
+              <div class="col-4 col-form-label text-left">
+                <input class="form-control m-input" id="X_power"  type="text" name="X_power" autocomplete="off"/>
+              </div>
+            </div>
+            <div class="form-group m-form__group row" style="height:60px">
+              <label class="col-2 col-form-label text-right">Y：</label>
+              <div class="col-4 col-form-label text-left">
+                <input class="form-control m-input" id="Y_power"  type="text" name="Y_power" autocomplete="off"/>
+              </div>
+            </div>
+            <div class="form-group m-form__group row" style="padding-left:40px;">
+              <p>输入1-100的正整数</p>
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-primary power_sure">
+            确定
+          </button>
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">
+            取消
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</body>
+</html>
+<script>
+  //初始值
+  function init() {
+    var initURL = contextPath + '/home/reputation_level_config'
+    $.ajax({
+      type: 'get',
+      url: initURL,
+      dataType:'json',
+      success:function(data){
+        $('.modify_level').attr('data-id',data.id)
+        $('.a_value').html(data.a)
+        $('.x_value').html(data.x)
+        $('.y_value').html(data.y)
+        $('.z_value').html(data.z)
+      }
+    })
+  }
+  init()
+  //能量
+  function initPower(){
+    var initURL = contextPath + '/home/power_config'
+    $.ajax({
+      type: 'get',
+      url: initURL,
+      dataType:'json',
+      success:function(data){
+        $('.power_x').html(data.eachOperatePowerPercent)
+        $('.power_y').html(data.powerPercent)
+      }
+    })
+  }
+  initPower()
+  formValidate = function(form,rules, messages) {
+    $(form).validate({
+      rules: rules,
+      messages:messages
+    })
+  }
+  var prestige_form = $('#prestige')
+  var prestige_rules = {
+    a_name:{
+      required:true
+    },
+    x_name:{
+      required:true
+    },
+    y_name:{
+      required:true
+    },
+    z_name:{
+      required:true
+    }
+  }
+  var prestige_message = {
+    a_name:{
+      required:"请填写参数",
+    },
+    x_name:{
+      required:"请填写参数",
+    },
+    y_name:{
+      required:"请填写参数",
+    },
+    z_name:{
+      required:"请填写参数",
+    },
+  }
+  formValidate(prestige_form,prestige_rules,prestige_message)
+  $('.prestige_fix').on('click',function(){
+      $('#prestige_modal').modal('show')
+      $('#a_name').val($('.a_value').html())
+      $('#x_name').val($('.x_value').html())
+      $('#y_name').val($('.y_value').html())
+      $('#z_name').val($('.z_value').html())
+  })
+  /*提交*/
+  $('.sure').on('click',function(){
+    if(!$('#prestige').valid()){
+      return
+    }
+    var PostUrl = contextPath + '/home/reputation_level_config'
+    var a_name = $('#a_name').val()
+    var x_name = $('#x_name').val()
+    var y_name = $('#y_name').val()
+    var z_name = $('#z_name').val()
+    var param = {
+        a:parseInt(a_name),
+        x:parseInt(x_name),
+        y:parseInt(y_name),
+        z:parseInt(z_name)
+    }
+    if(a_name == $('.a_value').html() && x_name == $('.x_value').html() && y_name == $('.y_value').html() && z_name == $('.z_value').html()){
+        $('#prestige_modal').modal('hide')
+        return
+    }
+    $.ajax({
+      type:'post',
+      url:PostUrl,
+      data: param,
+      contentType:'application/x-www-form-urlencoded',
+      success:function(){
+        $('.a_value').html($('#a_name').val())
+        $('.x_value').html($('#x_name').val())
+        $('.y_value').html($('#y_name').val())
+        $('.z_value').html($('#z_name').val())
+        $('#prestige_modal').modal('hide')
+      }
+    })
+
+  })
+  /*能量设置*/
+  var power_form = $('#power')
+  var power_rules = {
+    X_power:{
+      required:true
+    },
+    Y_power:{
+      required:true
+    }
+  }
+  var power_message = {
+    X_power:{
+      required:"请填写参数",
+    },
+    Y_power:{
+      required:"请填写参数",
+    },
+  }
+  formValidate(power_form,power_rules,power_message)
+  $('.power_fix').on('click',function(){
+    $('#power_modal').modal('show')
+    $('#X_power').val($('.power_x').html())
+    $('#Y_power').val($('.power_y').html())
+  })
+  $('.power_sure').on('click',function(){
+    if(!$('#power').valid()){
+      return
+    }
+    var PostUrl = contextPath + '/home/power_config'
+    var X_powerVal = $('#X_power').val()
+    var Y_powerVal = $('#Y_power').val()
+    var param = {
+      eachOperatePowerPercent:parseInt(X_powerVal),
+      powerPercent:parseInt(Y_powerVal)
+    }
+    if(X_powerVal == $('.power_x').html() && Y_powerVal == $('.power_y').html()){
+      $('#power_modal').modal('hide')
+      return
+    }
+    $.ajax({
+      type:'post',
+      url:PostUrl,
+      data: param,
+      contentType:'application/x-www-form-urlencoded',
+      success:function(){
+        $('.power_x').html($('#X_power').val())
+        $('.power_y').html($('#Y_power').val())
+        $('#power_modal').modal('hide')
+      }
+    })
+    /*var fix_a_value = $('#a_name').val()
+     var fix_x_value = $('#x_name').val()
+     var fix_y_value = $('#y_name').val()
+     var fix_z_value = $('#z_name').val()*/
+  })
+  $('#X_power').bind('input propertychange',function(){
+      var x_powerVal = $(this).val()
+      if($(this).val() != ''){
+        var reg = new RegExp("^(\\d|[1-9]\\d|100)$");
+        if(!reg.test(x_powerVal) || x_powerVal < 1) {
+          alert("请输入1-100的正整数！");
+          $(this).val('')
+        }
+      }
+  })
+  $('#Y_power').bind('input propertychange',function(){
+    var Y_powerVal = $(this).val()
+    if($(this).val() != ''){
+      var reg = new RegExp("^(\\d|[1-9]\\d|100)$");
+      if(!reg.test(Y_powerVal) || Y_powerVal < 1) {
+        alert("请输入1-100的正整数！");
+        $(this).val('')
+      }
+    }
+  })
+  function changeVal(dom){
+    $(dom).bind('input propertychange',function(){
+      var change_value = $(this).val()
+      if($(this).val() != ''){
+        var reg = new RegExp("^(\\d|[1-9]\\d|100)$");
+        if(!reg.test(change_value) || change_value < 1) {
+          alert("请输入1-100的正整数！");
+          $(this).val('')
+        }
+      }
+    })
+  }
+  changeVal($('#a_name'))
+  changeVal($('#x_name'))
+  changeVal($('#y_name'))
+  changeVal($('#z_name'))
+</script>

@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="admin/super">
+
+<body>
+<div class="content_container" th:fragment="content">
+  <div class="m-content">
+    <!--Begin::Main Portlet-->
+    <div class="alert m-alert--default" role="alert"><p>运营人员管理</p></div>
+    <div class="m-portlet">
+      <div class="m-portlet__head">
+        <div class="m-portlet__head-caption" style="position:relative">
+          <div class="m-portlet__head-title">
+            <h3 class="m-portlet__head-text">
+              运营人员列表
+            </h3>
+            <span class="btn btn-primary pull-right add_person" style="position:absolute;right: 0px;top:16px;">新增运营人员</span>
+          </div>
+        </div>
+      </div>
+      <div class="m-portlet__body">
+        <table class="table table-bordered table-hover " id="list" width="100%">
+          <thead>
+          <tr>
+            <th>序号</th>
+            <th>用户名</th>
+            <th>最后登录时间</th>
+            <th>操作</th>
+          </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+  <!--modal-->
+  <div class="modal fade" id="delete" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">
+            删除运营人员
+          </h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+											<span aria-hidden="true">
+												&times;
+											</span>
+          </button>
+          <!--<div class="m-demo-icon__preview">
+            <i class="la la-close"></i>
+          </div>-->
+        </div>
+        <div class="modal-body">
+          <p>
+            您确认要删除该运营人员吗？
+          </p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-primary sure">
+            确定
+          </button>
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">
+            取消
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</body>
+</html>
+<script>
+  $('.add_person').on('click',function(){
+      location.href = contextPath + '/super/added'
+  })
+  /*获取数据*/
+  function show(){
+    var list_url = contextPath + '/web/finduser'
+    var html = ''
+    $.ajax({
+      type:"get",
+      async: false,
+      url:list_url,
+      dataType:'json',
+      success:function(data){
+        $(data).each(function(i,item){
+          html += '<tr data-id="'+$(item)[0].id+'" data-index="'+i+'">'
+          html += '<td>'+(i+1)+'</td>'
+          html += '<td>'+$(item)[0].userName+'</td>'
+          if($(item)[0].loginTime == null){
+            html += '<td></td>'
+          }else{
+            html += '<td>'+formatDate($(item)[0].loginTime)+'</td>'
+          }
+          html += '<td><a href="javascript:;" style="margin-right: 20px" class="detail">查看</a><a href="javascript:;" style="margin-right: 20px" class="edit">编辑</a><a href="javascript:;" class="delete">删除</a></td></tr>'
+        })
+        $('#list').find('tbody').append(html)
+      },error:function(data){
+        console.log(data)
+      }
+    })
+  }
+  show();
+  /*查看*/
+  $('#list tbody').on('click','.detail',function(){
+    window.sessionStorage['detail'] = $(this).parent().parent().attr('data-id')
+    window.open(contextPath+'/super/operate');
+  })
+  /*编辑*/
+  $('#list tbody').on('click','.edit',function(){
+    window.sessionStorage['edit'] = $(this).parent().parent().attr('data-id')
+    location.href = contextPath + '/super/edit'
+  })
+  /*删除*/
+  var del_id = null
+  var del_url = null
+  var arr = []
+  $('#list tbody').on('click','.delete',function(){
+    $('#delete').modal('show')
+    var index = $(this).parent().parent().find('td:nth-child(1)').text()
+    del_id = $(this).parent().parent().attr('data-id')
+    del_url = contextPath + '/delete/' + del_id
+    $('.sure').attr('data-id',(parseInt(index)));
+  })
+  $('.sure').on('click',function(){
+    var dom = $(this).attr('data-id')
+    $.ajax({
+      type:'post',
+      url:del_url,
+      dataType:'json',
+      success:function(data){
+        $('#delete').modal('hide')
+        $('#list tbody').find('tr:nth-child('+dom+')').remove()
+        sort();
+      },error:function(data){
+        console.log(data)
+      }
+    })
+  })
+  //排序
+  function sort(){
+    $('#list').find('tbody tr td:nth-child(1)').each(function(i,item){
+        arr.push($(item).text())
+    })
+    for(var k=1;k<=arr.length;k++){
+      $('#list').find('tbody tr td:nth-child(1)').each(function(i,item){
+          if((i+1) == k){
+            $(item).text(k)
+          }
+      })
+    }
+  }
+
+  //转换成时间格式
+  function formatDate(date){
+    var oDate = new Date(date),
+      oYear = oDate.getFullYear(),
+      oMonth = oDate.getMonth()+1,
+      oDay = oDate.getDate(),
+      oHour = oDate.getHours(),
+      oMin = oDate.getMinutes(),
+      oSen = oDate.getSeconds(),
+      oTime = oYear +'-'+ getzf(oMonth) +'-'+ getzf(oDay) +' '+ getzf(oHour) +':'+ getzf(oMin) +':'+getzf(oSen);//最后拼接时间
+    return oTime;
+  };
+  //补0操作
+  function getzf(num){
+    if(parseInt(num) < 10){
+      num = '0'+num;
+    }
+    return num;
+  }
+</script>
+

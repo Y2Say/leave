@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="admin/index">
+
+<body>
+<div class="content_container" th:fragment="content">
+  <div class="m-content">
+    <!--Begin::Main Portlet-->
+    <div class="alert m-alert--default" role="alert"><p>禁言列表</p></div>
+    <div class="m-portlet">
+      <div class="m-portlet__head">
+        <div class="m-portlet__head-caption">
+          <div class="m-portlet__head-title">
+            <h3 class="m-portlet__head-text">
+              数据列表
+            </h3>
+          </div>
+        </div>
+      </div>
+      <div class="m-portlet__body">
+        <table class="table table-bordered table-hover " id="memberdisList" width="100%">
+          <thead>
+          <tr>
+            <th>账号</th>
+            <th>昵称</th>
+            <th>禁言时间</th>
+            <th>禁言操作人</th>
+            <th>积分</th>
+            <th>声望等级</th>
+            <th>主题帖数</th>
+            <th>总奖励</th>
+            <th>操作</th>
+          </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+  <!--modal-->
+  <div class="modal fade" id="dis_person" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">
+            解禁会员
+          </h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+											<span aria-hidden="true">
+												&times;
+											</span>
+          </button>
+          <!--<div class="m-demo-icon__preview">
+            <i class="la la-close"></i>
+          </div>-->
+        </div>
+        <div class="modal-body">
+          <p>
+            您确认要解禁该会员？解禁后回复发言权
+          </p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-primary sure">
+            确定
+          </button>
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">
+            取消
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</body>
+</html>
+<script>
+  /*列表渲染*/
+    var member_list = $('#memberdisList').DataTable({
+        "searchable": true,
+        "processing": true,
+        "ordering": true, //允许排序
+        "serverSide": true,
+        "stateSave": false,
+        "info": false,
+        "bLengthChange": true,
+        "oLanguage": { //国际语言转化
+            "sLengthMenu": "每页显示数量 _MENU_ ",
+            "sZeroRecords": "查询不到任何相关数据",
+            "sSearch": '',
+            "sSearchPlaceholder":"会员昵称、账号",
+            "sEmptyTable": "暂无数据内容！",
+            "sLoadingRecords": "努力加载中...",
+            "sProcessing": "处理中...",
+            "oPaginate": {
+                "sPrevious": "上页",
+                "sNext": "下页"
+            }
+        },
+        ajax: {
+            url: contextPath + "/associator/gag_info_list",
+            dataSrc: function (json) {
+                if (json.associatorListPage == null) {
+                    json.associatorListPage = []
+                }
+                return json.associatorListPage
+            },
+            type: 'post',
+            data: function (data) {
+                data.status = 0;
+                console.debug(data);
+                return JSON.stringify(data);
+            },
+            dataType: "json",
+            processData: false,
+            contentType: 'application/json;charset=UTF-8'
+        },
+        "language": {
+            "url": "js/dataTables/chinese.lang.json"
+        },
+        "columns": [
+            {"data": "account"},
+            {"data": "nickName"},
+            {"data": "operateTime"},
+            {"data": "operaterName"},
+            {"data": "score"},
+            {"data": "prestigeLevel"},
+            {"data": "subPostNum"},
+            {"data": "reward"},
+            {"data": "accountId"}
+        ],
+        "columnDefs": [{
+            orderable: false,
+            targets: [0,1,2,3,8]
+        }, {
+            "render": function (data, type, row) {
+                return '<a href="javascript:;" style="margin-right: 15px;" class="detail" data-id="' + data + '">查看详情</a><a href="javascript:;" class="gag" data-id="'+data+'">解禁</a>'
+            },
+            "targets": 8
+        },
+          {
+            "render": function (data, type, row) {
+              return '<span>'+formatDate(data)+'</span>'
+            },
+            "targets": 2
+          }
+        ],
+        "order": [2, "desc"],
+        "drawCallback": function () {
+          $('#memberdisList th:first').removeClass('sorting_asc');
+          if($('#memberdisList').find('tbody tr td').text() == '暂无数据内容！'){
+              $('#memberdisList_paginate').addClass('hide')
+          }
+          save_dis();
+        },
+        select: true
+    })
+    /*解禁*/
+    function save_dis(){
+      $('.gag').on('click',function(){
+          $('#dis_person').modal('show')
+          var dis_id = $(this).attr('data-id')
+          $('.sure').attr('data-id',dis_id)
+      })
+    }
+    $('.sure').on('click',function(){
+      var dom = $(this).attr('data-id')
+      var dis_url = contextPath + '/associator/lift_a_ban/' + dom
+      $.ajax({
+        type:'post',
+        url:dis_url,
+        dataType:'json',
+        success:function(data){
+          $('#dis_person').modal('hide')
+          member_list.ajax.reload()
+        },error:function(data){
+          console.log(data)
+        }
+      })
+    })
+    /*转换时间格式*/
+    function formatDate(date){
+      var oDate = new Date(date),
+        oYear = oDate.getFullYear(),
+        oMonth = oDate.getMonth()+1,
+        oDay = oDate.getDate(),
+        oHour = oDate.getHours(),
+        oMin = oDate.getMinutes(),
+        oSen = oDate.getSeconds(),
+        oTime = oYear +'-'+ getzf(oMonth) +'-'+ getzf(oDay) +' '+ getzf(oHour) +':'+ getzf(oMin) +':'+getzf(oSen);//最后拼接时间
+      return oTime;
+    };
+    //补0操作
+    function getzf(num){
+      if(parseInt(num) < 10){
+        num = '0'+num;
+      }
+      return num;
+    }
+    /*查看详情*/
+    $("#memberdisList ").on('click','.detail',function(){
+      var details = $(this).attr('data-id');
+      var renown = $(this).parents("tr").find("td").eq("5").html();
+      var thread = $(this).parents("tr").find("td").eq("6").html();
+      var total_reward = $(this).parents("tr").find("td").eq("7").html();
+      sessionStorage.setItem('keyId', details);
+      sessionStorage.setItem('keyRenown', renown);
+      sessionStorage.setItem('keyThread', thread);
+      sessionStorage.setItem('keyTotal', total_reward);
+      window.open( '/system/member');
+    })
+</script>
+

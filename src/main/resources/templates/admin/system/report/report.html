@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="admin/index">
+
+<body>
+<div class="content_container" th:fragment="content">
+  <div class="m-content">
+    <div class="alert m-alert&#45;&#45;default" role="alert"><p>审核详情</p></div>
+    <div class="m-portlet">
+      <div class="m-portlet__head">
+        <div class="m-portlet__head-caption">
+          <div class="m-portlet__head-title">
+            <h3 class="m-portlet__head-text">
+              举报信息
+            </h3>
+          </div>
+        </div>
+      </div>
+      <div class="m-portlet__body">
+        <table class="table table-bordered table-hover " id="memberList" width="100%">
+          <thead>
+          <tr>
+            <th>举报日期</th>
+            <th>举报人账号</th>
+            <th>被举报用户账号</th>
+            <th>被举报帖子编号</th>
+          </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="reportDate"></td>
+              <td class="reportNumber"></td>
+              <td class="reportedName"></td>
+              <td class="reportedNum" style="color: #4fa5ff"></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div class="m-portlet">
+      <div class="m-portlet__head">
+        <div class="m-portlet__head-caption">
+          <div class="m-portlet__head-title">
+            <h3 class="m-portlet__head-text">
+              审核信息
+            </h3>
+          </div>
+        </div>
+      </div>
+      <div class="m-portlet__body">
+        <form id="audit_form">
+          <div class="form-group m-form__group row" style="height:60px">
+            <label class="col-2 col-form-label text-right"><b class="red">*</b>审核结果：</label>
+            <div class="col-4 col-form-label text-left">
+              <select class="form-control m-bootstrap-select m_selectpicker" name="audit" id="audit" style="opacity: 1">
+                <option value=""></option>
+                <option value="1">有效举报</option>
+                <option value="2">无效举报</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-group m-form__group row" style="height:140px">
+            <label class="col-2 col-form-label text-right"><b class="red">*</b>操作备注：</label>
+            <div class="col-4 col-form-label text-left">
+              <textarea class="form-control m-input" rows="5" id="remarks"  type="text" name="remarks" autocomplete="off" style="resize:none; width:100%;"></textarea>
+            </div>
+          </div>
+        </form>
+        <div class="form-group m-form__group row">
+          <div class="col-6 text-right">
+            <span class="btn btn-primary save">保存</span>
+          </div>
+          <div class="col-3">
+            <span class="btn btn-default cancel">取消</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!--modal-->
+  <div class="modal fade" id="auditOperate" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">
+            举报审核
+          </h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+											<span aria-hidden="true">
+												&times;
+											</span>
+          </button>
+          <!--<div class="m-demo-icon__preview">
+            <i class="la la-close"></i>
+          </div>-->
+        </div>
+        <div class="modal-body">
+          <p>
+            您确认通过举报？确认后帖子被屏蔽
+          </p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-primary sure" data-dismiss="modal">
+            确定
+          </button>
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">
+            取消
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!--modal-->
+  <div class="modal fade" id="success" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+        </div>
+        <div class="modal-body">
+          <p>
+            提交成功！
+          </p>
+        </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</body>
+</html>
+<script>
+  var reportId = null
+  var auditId = window.sessionStorage["auditId"];
+  var getUrl = contextPath + '/report/detail/' + auditId
+  var reportedId = null
+  $.ajax({
+    type:"get",
+    url: getUrl,
+    dataType:'json',
+    success:function(data){
+      reportId = data.id
+        reportedId = data.postId
+      $('.reportDate').text(formatDate(data.createTime))
+      $('.reportNumber').text(data.account)
+      $('.reportedName').text(data.reportedAccount)
+      $('.reportedNum').text(data.postId)
+    },error:function(data){
+      console.log(data)
+    }
+  })
+  $('.reportedNum').on('click',function(){
+    window.sessionStorage["postId"] = $(this).text()
+    window.open(contextPath + '/system/administration')
+  })
+  formValidate = function(form,rules, messages) {
+    $(form).validate({
+      rules: rules,
+      messages:messages
+    })
+  }
+  var audit_form = $('#audit_form')
+  var audit_rules = {
+    audit:{
+      required:true
+    },
+    remarks:{
+      required:true
+    },
+  }
+  var audit_message = {
+    audit:{
+      required:"审核结果不能为空",
+    },
+    remarks:{
+      required:"操作备注不能为空",
+    },
+  }
+  formValidate(audit_form,audit_rules,audit_message)
+  $('.save').on('click',function(){
+      if(!$('#audit_form').valid()){
+          return
+      }
+      var auditResults = $('#audit').val()
+      if(auditResults == 2){
+        var operationNotes = $('#remarks').val()
+        var param = {
+          id: reportId,
+          auditResults: auditResults,
+          operationNotes: operationNotes,
+          postId:reportedId
+        }
+        param = JSON.stringify(param)
+        var saveUrl = contextPath + '/audit/operate'
+        $.ajax({
+          type:"post",
+          url:saveUrl,
+          data:param,
+          contentType:"application/json",
+          dataType:'json',
+          success:function(data){
+            //$('#auditOperate').modal('hide')
+            $('#success').modal('show')
+            setTimeout(function(){
+              $('#success').modal('hide')
+              window.location.href = contextPath + '/system/pend'
+            },2000)
+          },error:function(data){
+            console.log(data)
+          }
+        })
+      }else{
+        $('#auditOperate').modal('show')
+      }
+  })
+  $('.sure').on('click',function(){
+    var auditResults = $('#audit').val()
+    var operationNotes = $('#remarks').val()
+    var param = {
+      id: reportId,
+      auditResults: auditResults,
+      operationNotes: operationNotes,
+      postId:reportedId
+    }
+    param = JSON.stringify(param)
+    var saveUrl = contextPath + '/audit/operate'
+    $.ajax({
+      type:"post",
+      url:saveUrl,
+      data:param,
+      contentType:"application/json",
+      dataType:'json',
+      success:function(data){
+        //$('#auditOperate').modal('hide')
+        $('#success').modal('show')
+        setTimeout(function(){
+            $('#success').modal('hide')
+            window.location.href = contextPath + '/system/pend'
+        },2000)
+      },error:function(data){
+        console.log(data)
+      }
+    })
+  })
+  $('.cancel').on('click',function(){
+      location.href = contextPath + '/system/pend'
+  })
+  /*转换时间格式*/
+  function formatDate(date) {
+    var oDate = new Date(date),
+      oYear = oDate.getFullYear(),
+      oMonth = oDate.getMonth() + 1,
+      oDay = oDate.getDate(),
+      oHour = oDate.getHours(),
+      oMin = oDate.getMinutes(),
+      oSen = oDate.getSeconds(),
+      oTime = oYear + '-' + getzf(oMonth) + '-' + getzf(oDay) + ' ' + getzf(oHour) + ':' + getzf(oMin) + ':' + getzf(oSen);//最后拼接时间
+    return oTime;
+  };
+  //补0操作
+  function getzf(num) {
+    if (parseInt(num) < 10) {
+      num = '0' + num;
+    }
+    return num;
+  }
+</script>

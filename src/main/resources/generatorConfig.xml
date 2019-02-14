@@ -39,7 +39,7 @@
             <property name="enableSubPackages" value="true"/>
         </javaClientGenerator>
 
-         <!--
+
             <table schema="orange" tableName="user_role" domainObjectName="UserRole">
                 <property name="useActualColumnNames" value="false"/>
             </table>
@@ -55,12 +55,25 @@
             </table>
             <table schema="orange" tableName="user" domainObjectName="User">
                 <property name="useActualColumnNames" value="false"/>
-            </table>-->
-
-
+            </table>
             <table schema="orange" tableName="menu" domainObjectName="Menu">
                 <property name="useActualColumnNames" value="false"/>
             </table>
+            <table schema="orange" tableName="department" domainObjectName="Department">
+                <property name="useActualColumnNames" value="false"/>
+            </table>
+             <table schema="orange" tableName="role" domainObjectName="Role">
+                <property name="useActualColumnNames" value="false"/>
+            </table>
+
+            <table schema="orange" tableName="operation" domainObjectName="Operation">
+                <property name="useActualColumnNames" value="false"/>
+            </table>
+            <table schema="orange" tableName="permission" domainObjectName="Permission">
+                <property name="useActualColumnNames" value="false"/>
+            </table>
+
+
 
     </context>
 </generatorConfiguration>

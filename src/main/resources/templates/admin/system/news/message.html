@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="admin/index">
+
+<body>
+<div class="content_container" th:fragment="content">
+  <div class="m-content">
+    <!--Begin::Main Portlet-->
+    <div class="alert m-alert--default" role="alert"><p>消息模板</p></div>
+    <div class="m-portlet">
+      <div class="m-portlet__head">
+        <div class="m-portlet__head-caption">
+          <div class="m-portlet__head-title">
+            <h3 class="m-portlet__head-text">
+              数据列表
+            </h3>
+          </div>
+        </div>
+      </div>
+      <div class="m-portlet__body">
+        <table class="table table-bordered table-hover " id="example" width="100%">
+          <thead>
+          <tr>
+            <th>模板名称</th>
+            <th>模板状态</th>
+            <th>操作</th>
+          </tr>
+          </thead>
+          <tbody>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+</body>
+</html>
+<script>
+  var listUrl = contextPath + '/template/list'
+  $.ajax({
+    type:'get',
+    url: listUrl,
+    dataType: 'json',
+    success:function(data){
+        render(data)
+    },error:function(data){
+        console.log(data)
+    }
+  })
+  /*渲染*/
+  function render(data){
+      var html = ''
+      $(data).each(function(i,item){
+          html += '<tr data-id = "'+$(item)[0].id+'" data-status="'+$(item)[0].status+'"><td>'+$(item)[0].templateName+'</td>'
+          html += ($(item)[0].status == 2 ? '<td>未启用</td>':'<td>已启用</td>')
+          html += '<td><a href="javascript:;" style="margin-right: 40px;margin-left: 20px;" class="detail">查看详情</a>'
+          html += $(item)[0].status == 2 ? '<span class="m-switch m-switch--icon m-switch--info"><label><input type="checkbox" name="" class="checkStatus"><span></span></label></span>':'<span class="m-switch m-switch--icon m-switch--info"><label><input type="checkbox" checked="checked" name="" class="checkStatus"><span></span></label></span>'
+          html += '</td></tr>'
+      })
+    $('#example').find('tbody').append(html)
+  }
+  $('#example').find('tbody').on('click','.detail',function(){
+      var dataId = $(this).parent().parent().attr('data-id')
+      window.sessionStorage['detail_mesId'] = dataId
+      window.open(contextPath + '/system/template')
+  })
+  $('#example').find('tbody').on('click','.checkStatus',function(){
+    var _this = $(this)
+    var mesId = $(this).parent().parent().parent().parent().attr('data-id')
+    var status = $(this).parent().parent().parent().parent().attr('data-status')
+    if(status == 2){
+        status = 1
+    }else{
+        status = 2
+    }
+    var mesUrl = contextPath + '/template/change_status'
+    var param = {
+        id : mesId,
+        status : status,
+    }
+    $.ajax({
+      type :'put',
+      url : mesUrl,
+      data : param,
+      contentType : 'application/x-www-form-urlencoded',
+      success: function(data){
+        if(status == 1){
+            _this.parent().parent().parent().parent().find('td:nth-child(2)').html('已启用')
+            _this.parent().parent().parent().parent().attr('data-status',status)
+        }else if(status == 2){
+            _this.parent().parent().parent().parent().find('td:nth-child(2)').html('未启用')
+            _this.parent().parent().parent().parent().attr('data-status',status)
+        }
+      },error:function(data){
+        if( _this.parent().parent().parent().parent().attr('data-status') == 2){
+          _this.prop('checked',false)
+        }else{
+            _this.prop('checked',true)
+        }
+      }
+    })
+  })
+</script>
+

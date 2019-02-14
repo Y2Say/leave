@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="admin/super">
+
+<body>
+<div class="content_container" th:fragment="content">
+  <form class="m-login__form m-form" action="" role="form" id="add_form" autocomplete="off">
+      <!-- BEGIN: Subheader -->
+      <!-- END: Subheader -->
+    <div class="m-content">
+      <!--Begin::Main Portlet-->
+      <div class="alert m-alert--default" role="alert"><p>运营人员管理</p></div>
+      <div class="m-portlet">
+        <div class="m-portlet__head">
+          <div class="m-portlet__head-caption">
+            <div class="m-portlet__head-title">
+              <h3 class="m-portlet__head-text">
+                基本信息
+              </h3>
+            </div>
+          </div>
+        </div>
+        <div class="m-portlet__body">
+          <div class="form-group m-form__group row" style="height:60px">
+            <label class="col-2 col-form-label text-right" style="color: #575962;"><b class="red">*</b>用户名：</label>
+            <div class="col-6 text-left title_name">
+              <input class="form-control m-input" id="name"  type="text" placeholder="请输入用户名" name="name" autocomplete="off"/>
+            </div>
+          </div>
+          <div class="form-group m-form__group row" style="height:60px">
+            <label class="col-2 col-form-label text-right" style="color: #575962;"><b class="red">*</b>密码：</label>
+            <div class="col-6 text-left">
+              <input class="form-control m-input" id="password"  type="password" placeholder="请输入密码"  name="password" autocomplete="off"/>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="m-portlet">
+        <div class="m-portlet__head">
+          <div class="m-portlet__head-caption">
+            <div class="m-portlet__head-title">
+              <h3 class="m-portlet__head-text">
+                用户权限
+              </h3>
+            </div>
+          </div>
+        </div>
+        <div class="m-portlet__body">
+          <div class="m-checkbox-inline">
+            <label class="m-checkbox">
+              <input type="checkbox" value="1"/>
+              会员管理
+              <span></span>
+            </label>
+            <label class="m-checkbox">
+              <input type="checkbox" value="2"/>
+              帖子管理
+              <span></span>
+            </label>
+            <label class="m-checkbox">
+              <input type="checkbox" value="3"/>
+              举报管理
+              <span></span>
+            </label>
+            <label class="m-checkbox">
+              <input type="checkbox" value="4"/>
+              规则管理
+              <span></span>
+            </label>
+            <label class="m-checkbox">
+              <input type="checkbox" value="5"/>
+              消息管理
+              <span></span>
+            </label>
+            <label class="m-checkbox">
+              <input type="checkbox" value="6"/>
+              充值记录
+              <span></span>
+            </label>
+            <label class="m-checkbox">
+              <input type="checkbox" value="7"/>
+              系统设置
+              <span></span>
+            </label>
+          </div>
+        </div>
+      </div>
+    </div>
+  </form>
+  <div class="m-form__group form-group row">
+    <div class="col-md-6 text-right">
+      <span class="btn btn-primary save">保存</span>
+    </div>
+    <div class="col-md-1 text-center">
+      <span class="btn btn-default cancel">取消</span>
+    </div>
+  </div>
+</div>
+</body>
+</html>
+<script>
+    var elength =  $(".m-menu__subnav li a");
+    var box  = elength.eq(1);
+    setTimeout(function(){
+        box.parents("li.m-menu__item--submenu").addClass("m-menu__item--open");
+        box.parents("div.m-menu__submenu").hide();
+        box.parents("div.m-menu__submenu").slideDown();
+        box.addClass("color_show");
+    },600);
+
+
+  /*验证*/
+  formValidate = function(form,rules, messages) {
+    $(form).validate({
+      rules: rules,
+      messages:messages
+    })
+  }
+  var add_form = $('#add_form')
+  var addform_rules = {
+    name:{
+      required:true,
+      isMobile:true
+    },
+    password:{
+      required:true,
+      minlength:5
+    }
+  }
+  var addform_message = {
+    name:{
+      required:"用户名不能为空",
+      isMobile:"填写正确的手机号码"
+    },
+    password:{
+      required:"密码不能为空",
+      minlength:"密码最小长度为6"
+    }
+  }
+  formValidate(add_form,addform_rules,addform_message)
+  /*提交*/
+  var power = []
+  $('.save').on('click',function(){
+    if(!$('#add_form').valid()){
+      return
+    }
+    power = []
+    $('.m-checkbox-inline').find('input').each(function(i,item){
+        if($(item).is(':checked')){
+          power.push($(this).val())
+        }
+    })
+    var name = $('#name').val()
+    var password = $("#password").val()
+    var param = {
+      userName: name,
+      password: password,
+      power: power
+    }
+    param =JSON.stringify(param)
+    var add_url = contextPath + '/web/adduser'
+    $.ajax({
+      type: 'post',
+      data: param,
+      url: add_url,
+      async: false,
+      contentType: 'application/json',
+      dataType: 'json',
+      processData: false,
+      success:function(data){
+        location.href = contextPath + '/super/personnel'
+      },error:function(data){
+        var temp = '<label id="name-error" class="error repeat" for="name">用户名重复</label>'
+        $('.title_name').append(temp)
+      }
+    })
+  })
+  $('#name').on('input propertychange',function(){
+      $('.repeat').remove()
+  })
+  /*取消*/
+  $('.cancel').on('click',function(){
+      location.href = contextPath + '/super/personnel'
+  })
+</script>

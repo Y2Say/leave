@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="admin/super">
+
+<body>
+<div class="content_container" th:fragment="content">
+  <div class="m-content">
+    <!--Begin::Main Portlet-->
+    <div class="alert m-alert--default" role="alert"><p>操作日志</p></div>
+    <div class="m-portlet">
+      <div class="m-portlet__head">
+        <div class="m-portlet__head-caption" style="position:relative">
+          <div class="m-portlet__head-title">
+            <h3 class="m-portlet__head-text">
+              日志列表
+            </h3>
+          </div>
+        </div>
+      </div>
+      <div class="m-portlet__body">
+        <table class="table table-bordered table-hover " id="list" width="100%">
+          <thead>
+          <tr>
+            <th>序号</th>
+            <th>账户</th>
+            <th>登录IP</th>
+            <th>操作时间</th>
+            <th>业务类型</th>
+            <th>操作</th>
+          </tr>
+          </thead>
+          <tbody>
+          </tbody>
+        </table>
+        <div id="page" class="page_div"></div>
+      </div>
+    </div>
+  </div>
+</div>
+</body>
+</html>
+<script>
+  render(1)
+  function render(num){
+    var page = num-1;
+    var url = contextPath + '/system_log_list/' + page
+    $.ajax({
+      type: 'get',
+      url: url,
+      success:function(data){
+          var dataList = data.logListPage
+          var html = ''
+          $(dataList).each(function(i,item){
+              html = ` <tr>
+                        <td>${i+1}</td>
+                        <td>${item.account}</td>
+                        <td>${item.loginIp}</td>
+                        <td>${formatDate(item.createTime)}</td>
+                        <td>${item.description}</td>
+                        <td data-id="${item.id}"><a href="javascript:;" class="detail">查看详情</a></td>
+                      </tr>`
+            $('#list').find('tbody').append(html)
+          })
+          detail_page()
+          $("#page").paging({
+            pageNo: num,
+            totalPage: Math.ceil((data.maxCount)/10),
+            totalSize: data.maxCount,
+            callback: function(num) {
+              $('#list').find('tbody').html('')
+              render(num);
+            }
+          })
+      }
+    })
+  }
+  function detail_page(){
+    $('.detail').on('click',function(){
+      var operateId = $(this).parent().attr("data-id")
+      var title = $(this).parent().prev().text()
+      window.sessionStorage['operateId'] = operateId
+      window.sessionStorage['title'] = title
+      window.open(contextPath + '/super/operateDetail')
+    })
+  }
+  /*转换时间格式*/
+  function formatDate(date){
+    var oDate = new Date(date),
+      oYear = oDate.getFullYear(),
+      oMonth = oDate.getMonth()+1,
+      oDay = oDate.getDate(),
+      oHour = oDate.getHours(),
+      oMin = oDate.getMinutes(),
+      oSen = oDate.getSeconds(),
+      oTime = oYear +'-'+ getzf(oMonth) +'-'+ getzf(oDay) +' '+ getzf(oHour) +':'+ getzf(oMin) +':'+getzf(oSen);//最后拼接时间
+    return oTime;
+  };
+  //补0操作
+  function getzf(num){
+    if(parseInt(num) < 10){
+      num = '0'+num;
+    }
+    return num;
+  }
+</script>
+

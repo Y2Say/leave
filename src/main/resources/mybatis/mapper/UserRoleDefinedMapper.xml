@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yj2.leave.mapper.UserRoleDefinedMapper">
+    <resultMap id="BaseResultMap" type="com.yj2.leave.entity.UserRole">
+
+        <result column="user_id" jdbcType="VARCHAR" property="userId"/>
+        <result column="role_id" jdbcType="VARCHAR" property="roleId"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+    </resultMap>
+
+
+    <!--根据用户ID查询角色Ids-->
+    <select id="queryRoleIdsByUserId" parameterType="com.yj2.leave.entity.UserExample" resultType="java.lang.String">
+    select roleId
+    from user_role
+    WHERE user_id=#{userId,jdbcType=VARCHAR}
+  </select>
+</mapper>

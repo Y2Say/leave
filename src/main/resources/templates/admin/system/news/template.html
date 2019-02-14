@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="admin/index">
+
+<body>
+<div class="content_container" th:fragment="content">
+  <div class="m-content">
+    <!--Begin::Main Portlet-->
+    <div class="alert m-alert--default" role="alert"><p>模板详情</p></div>
+    <div class="m-portlet">
+      <div class="m-portlet__body">
+        <form id="templateForm">
+          <div class="form-group m-form__group row">
+            <label class="col-3 col-form-label text-right">模板名称：</label>
+            <label class="col-3 col-form-label text-left name"></label>
+          </div>
+          <div class="form-group m-form__group row">
+            <label class="col-3 col-form-label text-right">触发条件：</label>
+            <label class="col-3 col-form-label text-left condition"></label>
+          </div>
+          <div class="form-group m-form__group row">
+            <label class="col-3 col-form-label text-right">收件人：</label>
+            <label class="col-3 col-form-label text-left reportName"></label>
+          </div>
+          <div class="form-group m-form__group row" style="height:60px;">
+            <label class="col-3 col-form-label text-right"><b class="red">*</b>消息标题：</label>
+            <div class="col-6">
+              <input class="form-control m-input" id="title"  type="text" name="title" autocomplete="off"/>
+            </div>
+          </div>
+          <div class="form-group m-form__group row">
+            <label class="col-3 col-form-label text-right"  style="height:220px;"><b class="red">*</b>消息内容：</label>
+            <div class="col-6">
+              <textarea class="form-control m-input" id="mesContent"  type="text" name="mesContent" autocomplete="off" rows="10"></textarea>
+            </div>
+          </div>
+          <div class="form-group m-form__group row">
+            <label class="col-3 col-form-label text-right">模板开关：</label>
+            <div class="col-3">
+            <span class="m-switch m-switch--icon m-switch--info">
+              <label>
+                <input type="checkbox" checked="checked" name="" class="checkInput">
+                <span></span>
+              </label>
+            </span>
+            </div>
+            <label class="col-3 col-form-label text-right"><a href="javascript:;" class="description">?参数说明</a></label>
+          </div>
+        </form>
+        <div class="form-group m-form__group row operate">
+
+        </div>
+      </div>
+    </div>
+  </div>
+  <!--modal-->
+  <div class="modal fade" id="description" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">
+            参数说明
+          </h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+											<span aria-hidden="true">
+												&times;
+											</span>
+          </button>
+          <!--<div class="m-demo-icon__preview">
+            <i class="la la-close"></i>
+          </div>-->
+        </div>
+        <div class="modal-body">
+          <p>参数使用说明：</p>
+          <p>1、参数指消息模板中的变量，在发送消息时根据具体业务获取对应的数据。</p>
+          <p>2、参数是系统创建的参数，由［］及中文组成，［］为英文半角，用户不能自己创建和编辑。</p>
+          <p>3、选择参数时，只能选择模板对应的参数，不可选择超出模板限定之外的变量。但在给定的参数中，变量是否选用由业务人员自行考量。</p>
+        </div>
+        <div class="modal-footer" style="display: block">
+          <p>插入参数：</p>
+          <div class="form-group m-form__group row parameter_content">
+            <!--<label class="col-3 col-form-label text-left parameter date"><a href="javascript:;">[帖子发布时间]</a></label>
+            <label class="col-3 col-form-label text-left parameter report_time"><a href="javascript:;">[举报时间]</a></label>
+            <label class="col-3 col-form-label text-left parameter report_num"><a href="javascript:;">[举报编号]</a></label>
+            <label class="col-3 col-form-label text-left parameter user_info"><a href="javascript:;">[用户账号]</a></label>-->
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="modal fade" id="success" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-body">
+          <p>保存成功！</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</body>
+</html>
+<script>
+  function modal_show(){
+    var html = null
+    $('.parameter').each(function(i,item){
+      $(item).on('click',function(){
+        html = $('#mesContent').val()
+        $('#mesContent').val(html+$(this).find('a').html())
+        $('#description').modal('hide')
+      })
+    })
+  }
+  function modalShow(status){
+    if(status == 2){
+      $('.description').on('click',function(){
+        $('#description').modal('show')
+      })
+    }
+  }
+  /*获取信息*/
+  var detailId = window.sessionStorage['detail_mesId']
+  var detailUrl = contextPath + '/template/detail/' + detailId
+  $.ajax({
+    type:'get',
+    url:detailUrl,
+    dataType:'json',
+    success:function(data){
+        render(data)
+    },error:function(data){
+        console.log(data)
+    }
+  })
+  /*渲染*/
+  function render(data){
+    $('.name').html(data.templateName)
+    if(data.templateName == '会员被禁言' || data.templateName == '会员解禁'){
+      $('.parameter_content').append('<label class="col-3 col-form-label text-left parameter user_info"><a href="javascript:;">[用户账号]</a></label>')
+    }else if(data.templateName == '帖子被屏蔽-管理员屏蔽'){
+      $('.parameter_content').append('<label class="col-3 col-form-label text-left parameter date"><a href="javascript:;">[帖子发布时间]</a></label><label class="col-3 col-form-label text-left parameter user_info"><a href="javascript:;">[用户账号]</a></label>')
+    }else{
+      $('.parameter_content').append('<label class="col-3 col-form-label text-left parameter date"><a href="javascript:;">[帖子发布时间]</a></label><label class="col-3 col-form-label text-left parameter report_time"><a href="javascript:;">[举报时间]</a></label> <label class="col-3 col-form-label text-left parameter report_num"><a href="javascript:;">[举报编号]</a></label> <label class="col-3 col-form-label text-left parameter user_info"><a href="javascript:;">[用户账号]</a></label>')
+    }
+    $('.condition').html(data.trigger)
+    $('.reportName').html(data.account)
+    $('#title').val(data.title)
+    $('#mesContent').val(data.content)
+    modalShow(data.status)
+    console.log(status)
+    if(data.status == 1){
+      $('.operate').addClass('hide')
+      $('#title').attr('disabled','disabled')
+      $('#mesContent').attr('disabled','disabled')
+      $('.checkInput').prop('checked',true)
+      $('.checkInput').attr('disabled','disabled')
+      $('.checkInput').prop('checked',true)
+    }else if(data.status == 2){
+      $('.operate').append('<div class="col-6 text-right"><span class="btn btn-primary save">保存</span></div><div class="col-3"><span class="btn btn-default cancel">取消</span></div>')
+      $('.checkInput').prop('checked',false)
+    }
+    modal_show()
+    save()
+  }
+  /*提交信息*/
+  formValidate = function(form,rules, messages) {
+    $(form).validate({
+      rules: rules,
+      messages:messages
+    })
+  }
+  var template_form = $('#templateForm')
+  var template_rules = {
+    title:{
+      required:true
+    },
+    mesContent:{
+      required:true
+    },
+  }
+  var template_message = {
+    title:{
+      required:"消息标题不能为空",
+    },
+    mesContent:{
+      required:"消息内容不能为空",
+    },
+  }
+  formValidate(template_form,template_rules,template_message)
+  function save(){
+    $('.save').on('click',function(){
+      if(!$('#templateForm').valid()){
+        return
+      }
+      var detail_status = ''
+      if($('.checkInput').prop('checked')){
+        detail_status = 1
+      }else{
+        detail_status = 2
+      }
+      var name = $('.name').html()
+      var title = $('#title').val()
+      var mesContent = $('#mesContent').val()
+      var submitUrl = contextPath + '/template/update'
+      var param = {
+        id:detailId,
+        status : detail_status,
+        templatename : name,
+        title : title,
+        content : mesContent
+      }
+      param = JSON.stringify(param)
+      $.ajax({
+        type:'put',
+        url:submitUrl,
+        data:param,
+        contentType:'application/json',
+        dataType:'json',
+        success:function(data){
+          $('#success').modal('show')
+          setTimeout(function(){
+            $('#success').modal('hide')
+            location.href = contextPath + '/system/message'
+          },2000)
+        },error:function(data){
+          console.log(data)
+        }
+      })
+    })
+    $('.cancel').on('click',function(){
+        location.href = contextPath + '/system/message'
+    })
+  }
+
+</script>

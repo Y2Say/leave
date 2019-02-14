@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="admin/super">
+
+<body>
+<div class="content_container" th:fragment="content">
+  <div class="m-content">
+    <!--Begin::Main Portlet-->
+    <div class="alert m-alert--default" role="alert"><p>日志详情</p></div>
+    <div class="m-portlet">
+      <div class="m-portlet__head">
+        <div class="m-portlet__head-caption" style="position:relative">
+          <div class="m-portlet__head-title">
+            <h3 class="m-portlet__head-text">
+              <span class="name_title"></span>修改
+            </h3>
+          </div>
+        </div>
+      </div>
+      <div class="m-portlet__body">
+        <table class="table table-bordered table-hover " id="list" width="100%">
+          <thead>
+          <tr>
+            <th>名称</th>
+            <th>旧值</th>
+            <th>新值</th>
+          </tr>
+          </thead>
+          <tbody>
+
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+</body>
+</html>
+<script>
+  $('.name_title').html(window.sessionStorage['title'])
+  var operationId = window.sessionStorage['operateId']
+  function render(){
+      var url = contextPath + '/system_log_detail/' + operationId
+      $.ajax({
+        type:'get',
+        url: url,
+        success:function(data){
+          var html = ''
+          if(data.a){
+            html += ` <tr>
+                <td>a</td>
+                <td>${data.a.old_a}</td>
+                <td>${data.a.new_a}</td>
+              </tr>`
+          }
+          if(data.x){
+            html += ` <tr>
+              <td>x</td>
+              <td>${data.x.old_x}</td>
+              <td>${data.x.new_x}</td>
+              </tr>`
+          }
+          if(data.y){
+            html += ` <tr>
+              <td>y</td>
+              <td>${data.y.old_y}</td>
+              <td>${data.y.new_y}</td>
+              </tr>`
+          }
+          if(data.z){
+            html += ` <tr>
+              <td>z</td>
+              <td>${data.z.old_z}</td>
+              <td>${data.z.new_z}</td>
+              </tr>`
+          }
+          if(data.power){
+            html += ` <tr>
+              <td>X</td>
+              <td>${data.power.old_power}</td>
+              <td>${data.power.new_power}</td>
+              </tr>`
+          }
+          if(data.power_percent){
+            html += ` <tr>
+              <td>Y</td>
+              <td>${data.power_percent.old_power_percent}</td>
+              <td>${data.power_percent.new_power_percent}</td>
+              </tr>`
+          }
+          if(data.r){
+            html += ` <tr>
+              <td>R</td>
+              <td>${data.r.old_r}</td>
+              <td>${data.r.new_r}</td>
+              </tr>`
+          }
+          $('#list').find('tbody').append(html)
+        }
+
+      })
+  }
+  render()
+</script>

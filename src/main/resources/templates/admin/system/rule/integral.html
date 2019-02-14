@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="admin/index">
+
+<body>
+<div class="content_container" th:fragment="content">
+  <div class="m-content">
+    <div class="alert m-alert&#45;&#45;default" role="alert"><p>积分生成规则</p></div>
+    <div class="m-portlet">
+      <div class="m-portlet__head">
+        <div class="m-portlet__head-caption" style="position: relative">
+          <div class="m-portlet__head-title">
+            <h3 class="m-portlet__head-text">
+              积分生成规则
+            </h3>
+          </div>
+        </div>
+      </div>
+      <div class="m-portlet__body">
+        <table class="table table-bordered table-hover " id="generating_rule" width="100%" style="border-bottom: 0px;">
+          <thead>
+            <tr>
+              <th>合计</th>
+              <th>奖励区块见证人</th>
+              <th>奖励池</th>
+              <th>流动池积分</th>
+              <th>赞力池</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>每3秒产生40个积分</td>
+              <td>1个积分</td>
+              <td>2个积分</td>
+              <td>1个积分</td>
+              <td>36个积分</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+</body>
+</html>
+

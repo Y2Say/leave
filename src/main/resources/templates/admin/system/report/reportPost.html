@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="admin/index">
+
+<body>
+<div class="content_container" th:fragment="content">
+  <div class="m-content">
+    <div class="alert m-alert&#45;&#45;default" role="alert"><p>举报</p></div>
+    <div class="m-portlet">
+      <div class="m-portlet__head">
+        <div class="m-portlet__head-caption">
+          <div class="m-portlet__head-title">
+            <h3 class="m-portlet__head-text">
+              数据列表
+            </h3>
+          </div>
+        </div>
+      </div>
+      <div class="m-portlet__body">
+        <table class="table table-bordered table-hover " id="report" width="100%">
+          <thead>
+          <tr>
+            <th>帖子编号</th>
+            <th>操作</th>
+          </tr>
+          </thead>
+          <tbody>
+
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+  <!--modal-->
+  <div class="modal fade" id="Report_post" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">
+            举报帖子
+          </h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+											<span aria-hidden="true">
+												&times;
+											</span>
+          </button>
+          <!--<div class="m-demo-icon__preview">
+            <i class="la la-close"></i>
+          </div>-->
+        </div>
+        <div class="modal-body">
+          <p>
+            选择您举报信息的内容
+          </p>
+          <select class="form-control m-bootstrap-select m_selectpicker" name="type" id="type"
+                  style="opacity: 1">
+            <option value="">全部</option>
+            <option value="2">垃圾信息</option>
+            <option value="1">内容不当</option>
+          </select>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-primary sure">
+            确定
+          </button>
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">
+            取消
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</body>
+</html>
+<script>
+  var getData = contextPath + '/post/report_list'
+  var html = ''
+  $.ajax({
+    type:'get',
+    url:getData,
+    dataType:'json',
+    success:function(data){
+      $(data).each(function(i,item){
+        html += '<tr><td>'+item+'</td>'
+        html += '<td><a href="javascript:;" data-id="'+item+'" class="view">举报</a></td></tr>'
+      })
+      $('#report').find('tbody').append(html)
+    },error:function(data){
+        console.log(data)
+    }
+  })
+  $('#report').find('tbody').on('click','.view',function(){
+    var dom = $(this).attr('data-id')
+    $('#Report_post').modal('show')
+    $('.sure').attr('data-id',dom)
+  })
+  $('.sure').on('click',function(){
+      if($('#type').val() == ''){
+          alert("举报内容不能为空")
+          return
+      }
+      var dataId = $(this).attr('data-id')
+      var type = $('#type').val()
+      var reportUrl = contextPath + '/report/operation/' + dataId + '/' + type
+      $.ajax({
+        type:'post',
+        url: reportUrl,
+        contentType:'application/json',
+        dataType:'json',
+        success:function(data){
+          $('#Report_post').modal('hide')
+        },error:function(data){
+            console.log(data)
+        }
+      })
+  })
+</script>

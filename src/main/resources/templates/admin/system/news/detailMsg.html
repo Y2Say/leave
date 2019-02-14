@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="admin/index">
+
+<body>
+<div class="content_container" th:fragment="content">
+  <div class="m-content">
+    <!--Begin::Main Portlet-->
+    <div class="alert m-alert--default" role="alert"><p>已发消息</p></div>
+    <div class="m-portlet">
+      <div class="m-portlet__head">
+        <div class="m-portlet__head-caption" style="position: relative">
+          <div class="m-portlet__head-title" style="padding-top:10px">
+            <div class="media">
+              <div class="media-body">
+                <h4 class="media-heading title">Media heading</h4>
+                <p><span>收件人：</span><span class="nickName"></span><span class="account"></span></p>
+                <p><span>时间：</span><span class="date">2017年11月30号</span></p>
+              </div>
+              <div class="media-right" style="position: absolute;right:0">
+                <a href="#">
+                  <img class="media-object img" src="">
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="m-portlet__body">
+        <p class="content"></p>
+      </div>
+    </div>
+  </div>
+</div>
+</body>
+</html>
+<script>
+  var MsgId = window.sessionStorage['MsgId']
+  var detailUrl = contextPath + '/send/detail/' + MsgId
+  $.ajax({
+    type:'get',
+    url:detailUrl,
+    dataType:'json',
+    success:function(data){
+        $('.title').html(data.title)
+        $('.nickName').html(data.nickName)
+        $('.account').html(data.account)
+        $('.date').html(formatDate(data.createTime))
+        $('.content').html(data.content)
+        if(data.image != null){
+            $('.img').attr('src',data.image)
+        }else{
+          $('.img').attr('src','/img/icon.png')
+        }
+    },error:function(data){
+        console.log(data)
+    }
+  })
+  /*转换时间格式*/
+  function formatDate(date){
+    var oDate = new Date(date),
+      oYear = oDate.getFullYear(),
+      oMonth = oDate.getMonth()+1,
+      oDay = oDate.getDate(),
+      oHour = oDate.getHours(),
+      oMin = oDate.getMinutes(),
+      oTime = oYear +'年'+ getzf(oMonth) +'月'+ getzf(oDay) +'日'+ getzf(oHour) +':'+ getzf(oMin);//最后拼接时间
+    return oTime;
+  };
+  //补0操作
+  function getzf(num){
+    if(parseInt(num) < 10){
+      num = '0'+num;
+    }
+    return num;
+  }
+</script>

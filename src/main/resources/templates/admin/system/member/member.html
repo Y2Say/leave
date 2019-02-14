@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="admin/index">
+
+<body>
+<div class="content_container" th:fragment="content">
+  <div class="m-content">
+    <!--Begin::Main Portlet-->
+    <div class="alert m-alert--default" role="alert"><p>会员详情</p></div>
+    <div class="m-portlet">
+      <div class="m-portlet__head">
+        <div class="m-portlet__head-caption">
+          <div class="m-portlet__head-title">
+            <h3 class="m-portlet__head-text">
+              基本信息
+            </h3>
+          </div>
+        </div>
+      </div>
+      <div class="m-portlet__body">
+        <div class="form-group m-form__group row">
+          <label class="col-20 col-form-label text-right">账号：</label>
+          <div class="col-21 text-left">
+            <p class="account"></p>
+          </div>
+          <label class="col-20 col-form-label text-right">昵称：</label>
+          <div class="col-22 text-left">
+            <p class="nickName"></p>
+          </div>
+          <label class="col-21 col-form-label text-right">生日：</label>
+          <div class="col-22 text-left">
+            <p class="birthday"></p>
+          </div>
+          <label class="col-21 col-form-label text-right">个性签名：</label>
+          <div class="col-23 text-left">
+            <p class="sign"></p>
+          </div>
+        </div>
+        <div class="form-group m-form__group row">
+          <label class="col-20 col-form-label text-right">性别：</label>
+          <div class="col-21 text-left">
+            <p class="gender"></p>
+          </div>
+          <label class="col-20 col-form-label text-right">位置：</label>
+          <div class="col-22 text-left">
+            <p class="city"></p>
+          </div>
+          <label class="col-21 col-form-label text-right">注册时间：</label>
+          <div class="col-22 text-left">
+            <p class="createTime"></p>
+          </div>
+          <label class="col-21 col-form-label text-right">最后登录时间：</label>
+          <div class="col-23 text-left">
+            <p class="lastLoginTime"></p>
+          </div>
+        </div>
+        <div class="form-group m-form__group row">
+          <label class="col-20 col-form-label text-right">头像：</label>
+          <div class="col-21 text-left">
+            <p class="image">
+               <img src="">
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="m-portlet">
+      <div class="m-portlet__head">
+        <div class="m-portlet__head-caption">
+          <div class="m-portlet__head-title">
+            <h3 class="m-portlet__head-text">
+              统计信息
+            </h3>
+          </div>
+        </div>
+      </div>
+      <div class="m-portlet__body">
+        <table class="table table-bordered table-hover " id="Statistic" width="100%">
+          <thead>
+          <tr>
+            <th>声望等级</th>
+            <th>声望值</th>
+            <th>粉丝数</th>
+            <th>主题帖数</th>
+            <th>总奖励</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr>
+            <td class="renown"></td>
+            <td class="kudos"></td>
+            <td class="vermicelli"></td>
+            <td class="thread"></td>
+            <td class="award"></td>
+          </tr>
+          </tbody>
+          <tbody></tbody>
+        </table>
+
+        <div class="integral">
+            <h2>积分：<em class="score"></em></h2>
+               <table>
+                 <th>变更事件</th>
+                 <th>积分变更</th>
+                 <th>变更时间</th>
+                 </tr>
+                 </thead>
+                 <tbody id="tbody">
+
+                 </tbody>
+                 <tfoot><tr><td  colspan="3"><div id="page" class="page_div"></div></td></tr></tfoot>
+               </table>
+        </div>
+
+
+
+
+      </div>
+    </div>
+
+  </div>
+</div>
+</body>
+</html>
+
+
+<script>
+    var tie_nub = localStorage.getItem("tie");
+            var elength =  $(".m-menu__subnav li a");
+            var box  = elength.eq(tie_nub);
+            setTimeout(function(){
+                box.parents("li.m-menu__item--submenu").addClass("m-menu__item--open");
+                box.parents("div.m-menu__submenu").hide();
+                box.parents("div.m-menu__submenu").slideDown();
+                box.addClass("color_show");
+            },600);
+
+
+  var keyId = sessionStorage.getItem('keyId');
+  var details_url = contextPath + '/associator/basic_info/' + keyId;
+  $.ajax({
+      type: 'get',
+      url: details_url,
+      async: true,
+      contentType: 'application/json',
+      dataType: 'json',
+      processData: false,
+      success:function(data){
+          console.log(data);
+          $(".account").html(data.account);
+          $(".nickName").html(data.nickName);
+          $(".birthday").html(data.birthday);
+          $(".sign").html(data.sign);
+
+          if(data.city == null || data.city == "[]"){
+            $(".city").html("");
+          }
+          if(data.city != null && data.city != "[]"){
+              var cityjson = data.city;
+              var city = JSON.parse(cityjson);
+              $(".city").html(city[0].label + "-" +  city[1].label);
+          }
+
+          if(data.image == null){
+              $(".image img").attr("src","/img/icon.png");
+          };
+          if(data.image != null){
+              $(".image img").attr("src",'/download/' + data.image);
+          }
+          if(data.gender == '1'){
+              $(".gender").html("男");
+          };
+          if(data.gender == '0'){
+              $(".gender").html("女");
+          };
+
+          var Rtime = new Date(data.createTime);
+          var Y = Rtime.getFullYear() + '-';
+          var M = (Rtime.getMonth()+1 < 10 ? '0'+(Rtime.getMonth()+1) : Rtime.getMonth()+1) + '-';
+          var D = Rtime.getDate() + ' ';
+          var h = Rtime.getHours() + ':';
+          var m = Rtime.getMinutes() + ':';
+          var s = Rtime.getSeconds();
+          var Ltime = new Date(data.lastLoginTime);
+          var Ys = Ltime.getFullYear() + '-';
+          var Ms = (Ltime.getMonth()+1 < 10 ? '0'+(Ltime.getMonth()+1) : Ltime.getMonth()+1) + '-';
+          var Ds = Ltime.getDate() + ' ';
+          var hs = Ltime.getHours() + ':';
+          var ms = Ltime.getMinutes() + ':';
+          var ss = Ltime.getSeconds();
+          $(".createTime").html(Y+M+D+h+m+s);
+          $(".lastLoginTime").html(Ys+Ms+Ds+hs+ms+ss);
+
+      },error:function(data){
+        console.log(data)
+      }
+  })
+
+    var statistics = contextPath + '/associator/statistics_info/' + keyId;
+    $.ajax({
+        type: 'get',
+        url: statistics,
+        async: true,
+        contentType: 'application/json',
+        dataType: 'json',
+        processData: false,
+        success: function(data) {
+            $(".score").html(data.score);
+            $(".renown").html(data.prestigeLevel);
+            $(".kudos").html(data.prestige);
+            $(".vermicelli").html(data.fansCount);
+            $(".thread").html(data.subPostNum);
+            $(".award").html(data.reward);
+        },error:function(data){
+            console.log(data)
+        }
+    })
+
+</script>
+
+
+<script>
+    integral(1);
+    function integral(num) {
+        var postid = sessionStorage.getItem('keyId');
+        var page = num-1;
+        var post_url = contextPath + '/associator/score_change_list/' + postid + '/' + page;
+        $.ajax({
+            type: 'get',
+            url: post_url,
+            async: false,
+            dataType: 'json',
+            processData: false,
+            contentType: 'application/json',
+            success: function(data) {
+                console.log(data)
+                var table  = '';
+                for(var i=0;i<data.scoreChangeList.length;i++){
+                    var listtime = data.scoreChangeList[i].createTime;
+                    var listtime = new Date(parseInt(listtime));
+                    var Y = listtime.getFullYear() + '-';
+                    var M = (listtime.getMonth()+1 < 10 ? '0'+(listtime.getMonth()+1) : listtime.getMonth()+1) + '-';
+                    var D = listtime.getDate() + ' ';
+                    var h = listtime.getHours() + ':';
+                    var m = listtime.getMinutes() + ':';
+                    var s = listtime.getSeconds();
+
+                    var affair = '';
+                    if(data.scoreChangeList[i].changeEvents == "1"){
+                        affair = "主题帖结算"
+                    }
+                    if(data.scoreChangeList[i].changeEvents == "2"){
+                        affair = "回复帖结算"
+                    }
+                    if(data.scoreChangeList[i].changeEvents == "3"){
+                        affair = "点赞结算"
+                    }if(data.scoreChangeList[i].changeEvents == "4"){
+                        affair = "注册送积分"
+                    }
+                    if(data.scoreChangeList[i].changeEvents == "5"){
+                        affair = "充值购买"
+                    }
+                    if(data.scoreChangeList[i].changeEvents == "6"){
+                        affair = "举报奖励"
+                    }
+                    if(data.scoreChangeList[i].changeEvents == "7"){
+                        affair = "第三方兑换"
+                    }
+
+                    table +='<tr><td>'+ affair +'</td><td>'+ data.scoreChangeList[i].scoreChange +'</td><td>'+ Y+M+D+h+m+s +'</td></tr>';
+
+                };
+                document.getElementById('tbody').innerHTML = table;
+                $("#page").paging({
+                    pageNo: num,
+                    totalPage: Math.ceil((data.maxCount)/10),
+                    totalSize: data.maxCount,
+                    callback: function(num) {
+                        integral(num);
+                    }
+                })
+
+            },error:function(data){
+                console.log(data)
+            }
+        })
+    }
+</script>
+

@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="admin/index">
+
+<body>
+<div class="content_container" th:fragment="content">
+  <div class="m-content">
+    <!--Begin::Main Portlet-->
+    <div class="alert m-alert--default" role="alert"><p>在线帖子</p></div>
+    <div class="m-portlet">
+      <div class="m-portlet__head">
+        <div class="m-portlet__head-caption">
+          <div class="m-portlet__head-title">
+            <h3 class="m-portlet__head-text">
+              筛选查询
+            </h3>
+          </div>
+        </div>
+      </div>
+      <div class="m-portlet__body">
+        <div class="form-group m-form__group row">
+          <label class="col-1 col-form-label text-right">类型：</label>
+          <div class="col-2 text-left">
+            <select class="form-control m-bootstrap-select m_selectpicker" name="type" id="type" style="opacity: 1">
+              <option value="">全部</option>
+              <option value="1">主题帖</option>
+              <option value="2">回复贴</option>
+            </select>
+          </div>
+          <label class="col-1 col-form-label text-right">状态：</label>
+          <div class="col-2 text-left">
+            <select class="form-control m-bootstrap-select m_selectpicker" name="status" id="status" style="opacity: 1">
+              <option value="">全部</option>
+              <option value="1">已结算</option>
+              <option value="0">未结算</option>
+            </select>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="m-portlet">
+      <div class="m-portlet__head">
+        <div class="m-portlet__head-caption">
+          <div class="m-portlet__head-title">
+            <h3 class="m-portlet__head-text">
+              数据列表
+            </h3>
+          </div>
+        </div>
+      </div>
+      <div class="m-portlet__body">
+        <table class="table table-bordered table-hover " id="onlineList" width="100%">
+          <thead>
+          <tr>
+            <th>帖子编号</th>
+            <th>发布人</th>
+            <th>发布时间</th>
+            <th>回复数</th>
+            <th>赞力值</th>
+            <th>点赞数</th>
+            <th>奖金</th>
+            <th>类型</th>
+            <th>状态</th>
+            <th>操作</th>
+          </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+  <!--modal-->
+  <div class="modal fade" id="shield" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">
+            屏蔽帖子
+          </h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+											<span aria-hidden="true">
+												&times;
+											</span>
+          </button>
+          <!--<div class="m-demo-icon__preview">
+            <i class="la la-close"></i>
+          </div>-->
+        </div>
+        <div class="modal-body">
+          <p>
+            您确认要拼比帖子？屏蔽后无法恢复
+          </p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-primary sure">
+            确定
+          </button>
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">
+            取消
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</body>
+</html>
+<script>
+  var onlineList = $('#onlineList').DataTable({
+    "searchable": true,
+    "processing": true,
+    "ordering": true, //允许排序
+    "serverSide": true,
+    "stateSave": false,
+    "info": false,
+    "bLengthChange": true,
+    "oLanguage": { //国际语言转化
+      "sLengthMenu": "每页显示数量 _MENU_ ",
+      "sZeroRecords": "查询不到任何相关数据",
+      "sSearch": '',
+      "sSearchPlaceholder":"帖子编号、发布人",
+      "sEmptyTable": "暂无数据内容！",
+      "sLoadingRecords": "努力加载中...",
+      "sProcessing": "处理中...",
+      "oPaginate": {
+        "sPrevious": '上页',
+        "sNext": '下页'
+      }
+    },
+    ajax: {
+      url: contextPath + "/post/normal_list",
+      dataSrc: function (json) {
+        if (json.postNormalListPage == null) {
+          json.postNormalListPage = []
+        }
+        return json.postNormalListPage
+      },
+      type: 'post',
+      data: function (data) {
+        data.status = "1";
+        data.isEnd = $('#status').val();
+        data.postType = $('#type').val();
+        return JSON.stringify(data);
+      },
+      dataType: "json",
+      processData: false,
+      contentType: 'application/json;charset=UTF-8'
+    },
+    "language": {
+      "url": "js/dataTables/chinese.lang.json"
+    },
+    "columns": [
+      {"data": "id"},
+      {"data": "nickName"},
+      {"data": "createTime"},
+      {"data": "subPostNum"},
+      {"data": "likesValue"},
+      {"data": "operateNum"},
+      {"data": "reward"},
+      {"data": "parentId"},
+      {"data": "isEnd"},
+      {"data": "id"}
+    ],
+    "columnDefs": [{
+      orderable: false,
+      targets: [0,1,7,8,9]
+    }, {
+      "render": function (data, type, row) {
+        return '<a href="javascript:;" style="margin-right: 15px;" class="detail" data-id="' + data + '">查看详情</a><a href="javascript:;" data-id="' + data + '" class="screen">屏蔽</a>'
+      },
+      "targets": 9
+    },
+      {
+        "render": function (data, type, row) {
+          return data == '0'?'<span data-type="1">主题帖</span>':'<span data-type="2">回复贴</span>'
+        },
+        "targets": 7
+      },
+        {
+            "render": function (data, type, row) {
+                return '<span >' + formatDate(data) + '</span>'
+            },
+            "targets": 2
+        },
+      {
+        "render": function (data, type, row) {
+          return data == '1'?'<span>已结算</span>':'<span>未结算</span>'
+        },
+        "targets": 8
+      }
+    ],
+    "order": [2,"desc"],
+    "drawCallback": function () {
+      $('#onlineList thead th:first').removeClass('sorting_asc');
+      shieldFnc()
+    },
+    select: true
+  })
+  onload($('#type'),onlineList)
+  onload($('#status'),onlineList)
+  function onload(dom, node) {
+    $(dom).on('change', function () {
+      node.ajax.reload();
+    })
+  }
+  /*屏蔽帖子*/
+  function shieldFnc(){
+    $('.screen').on('click',function(){
+      $('#shield').modal('show')
+      var dis_id = $(this).attr('data-id')
+      $('.sure').attr('data-id',dis_id)
+    })
+  }
+
+  $('.sure').on('click',function(){
+    var dom = $(this).attr('data-id')
+    var shield_url = contextPath + '/post/shielding/' + dom
+    $.ajax({
+      type:'put',
+      url:shield_url,
+      dataType:'json',
+      success:function(data){
+        $('#shield').modal('hide')
+        onlineList.ajax.reload()
+      },error:function(data){
+        console.log(data)
+      }
+    })
+  })
+
+  /* 查看详情 */
+  $("#onlineList ").on('click','.detail',function(){
+      var details = $(this).attr('data-id');
+      localStorage.setItem('postId', details);
+      window.open( contextPath + '/system/administration');
+  })
+  /*转换时间格式*/
+  function formatDate(date){
+      var oDate = new Date(date),
+          oYear = oDate.getFullYear(),
+          oMonth = oDate.getMonth()+1,
+          oDay = oDate.getDate(),
+          oHour = oDate.getHours(),
+          oMin = oDate.getMinutes(),
+          oSen = oDate.getSeconds(),
+          oTime = oYear +'-'+ getzf(oMonth) +'-'+ getzf(oDay) +' '+ getzf(oHour) +':'+ getzf(oMin) +':'+getzf(oSen);//最后拼接时间
+      return oTime;
+  };
+  //补0操作
+  function getzf(num){
+      if(parseInt(num) < 10){
+          num = '0'+num;
+      }
+      return num;
+  }
+</script>

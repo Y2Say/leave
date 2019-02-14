@@ -119,142 +119,10 @@
 </html>
 
 <script>
-    /* 修改密码验证*/
-    forgetValidate = function(form,rules, messages) {
-        $(form).validate({
-            rules: rules,
-            messages:messages
-        })
-    }
 
-    var forget = $('#forget_password')
-    var forget_rules = {
-        newnumber:{
-            required:true,
-            isMobile:true
-        },
-        verification_code:{
-            required:true,
-            minlength:6
-        },
-        new_password:{
-            required:true,
-            minlength:6
-        },
-        confirmation_password:{
-            required:true,
-            minlength:6,
-            equalTo:"#new_password"
-        }
-    }
-    var forget_message = {
-        newnumber:{
-            required:"手机号不能为空",
-            isMobile:"填写正确的手机号码"
-        },
-        verification_code:{
-            required:"验证码不能为空",
-            minlength:"验证码长度为6"
-        },
-        new_password:{
-            required:"密码不能为空",
-            minlength:"密码最小长度为6"
-        },
-        confirmation_password:{
-            required:"密码不能为空",
-            minlength:"密码最小长度为6",
-            equalTo:"两次密码输入不一致"
-        }
-    }
-    forgetValidate(forget,forget_rules,forget_message)
-
-    function settime(){
-        var time = 60;
-        var btn_code =  $(".click_code");
-        var end = setInterval(function() {
-            if (time == 0) {
-                btn_code.removeAttr("disabled");
-                btn_code.val("获取验证码");
-                clearInterval(end);
-            } else {
-                btn_code.attr('disabled',"true")
-                btn_code.val(time-- + " 秒后重新获取")
-            }
-        }, 1000);
-    }
-
-    $(".click_code").click(function(){
-        var codephone = $("#newnumber").val();
-        var distinguish = "WEBFORGOT";
-
-        var code_url = contextPath + '/forgotcode/' + distinguish + "/" + codephone;
-        $.ajax({
-            type: 'get',
-            url: code_url,
-            async: true,
-            contentType: 'application/json',
-            dataType: 'json',
-            processData: false,
-            success:function(data){
-                settime();
-            },
-            error:function(data){
-                $(".forget_Up").addClass("forget_down");
-                var errors = JSON.parse(data.responseText);
-                $(".forget_Up").html(errors.errors[0].message)
-                setTimeout(function(){
-                    $(".forget_Up").removeClass("forget_down");
-                    $(".forget_Up").html("");
-                },3000)
-            }
-        })
-    })
-
-    $(".forget_modify").click(function(){
-        if(!$('#forget_password').valid()){
-            return
-        }
-        var phoneval = $("#newnumber").val();
-        var codeval =  $("#verification_code").val();
-        var passwordval =  $("#new_password").val();
-        var newpasswordval =  $("#confirmation_password").val();
-        var modify = {
-            mobile:phoneval,
-            code:codeval,
-            password:passwordval,
-            newPassword:newpasswordval
-        }
-        modifyjson =JSON.stringify(modify);
-        var modify_url = contextPath + '/forgot';
-        $.ajax({
-            type: 'post',
-            data:modifyjson,
-            url: modify_url,
-            async: true,
-            contentType: 'application/json',
-            dataType: 'json',
-            processData: false,
-            success:function(data){
-                $(".forget_Up").addClass("forget_down");
-                $(".forget_Up").html("密码设置成功");
-                setTimeout(function(){
-                    $(".forget_Up").removeClass("forget_down");
-                    $(".forget_Up").html("");
-                    window.location.reload();
-                },1000)
-            },error:function(data){
-                $(".forget_Up").addClass("forget_down");
-                $(".forget_Up").html("验证码错误");
-                setTimeout(function(){
-                    $(".forget_Up").removeClass("forget_down");
-                    $(".forget_Up").html("");
-                },3000)
-            }
-        })
-    })
 
     /* 登录验证*/
-    formValidate = function(form,rules, messages) {
+   /* formValidate = function(form,rules, messages) {
         $(form).validate({
             rules: rules,
             messages:messages
@@ -282,20 +150,20 @@
             minlength:"密码最小长度为6"
         }
     }
-    formValidate(login,login_rules,login_message)
+    formValidate(login,login_rules,login_message)*/
     /*登录*/
     $('#m_login_signin_submit').on('click',function(){
-        if(!$('#usersign').valid()){
+        /*if(!$('#usersign').valid()){
             return
-        }
+        }*/
         var account = $('#login_number').val()
         var password = $("#login_password").val()
         var sign = {
-            userName: account,
+            account: account,
             password: password,
         }
         sign =JSON.stringify(sign);
-        var login_url = contextPath + '/web/login';
+        var login_url = contextPath + '/user/login';
         $.ajax({
             type: 'post',
             data:sign,
@@ -305,22 +173,11 @@
             dataType: 'json',
             processData: false,
             success:function(data){
-                localStorage.setItem('keyname',name);
+                localStorage.setItem('keyname',account);
                 localStorage.setItem('keypass',password);
                 localStorage.setItem('keyid',data.id)
                 var ret = data.power;
-                if(ret == "0"){
 
-                    if($("#remember_password").is(':checked' +
-                            '' +
-                            '' +
-                            '')){
-                        localStorage.setItem('keybox','0')
-                    }else{
-                        localStorage.setItem('keybox','1')
-                    }
-                    location.href = 'super/index'
-                }else{
                     if($("#remember_password").is(':checked')){
                         localStorage.setItem('keybox','0')
                     }else{
@@ -328,7 +185,7 @@
                     }
                     location.href = 'system/index';
                     localStorage.setItem('keylist',data.power);
-                }
+
             },error:function(data){
                 $("#remember_password").prop('checked',false);
                 localStorage.clear();

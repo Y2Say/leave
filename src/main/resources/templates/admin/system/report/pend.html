@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="admin/index">
+
+<body>
+<div class="content_container" th:fragment="content">
+    <div class="m-content">
+        <div class="alert m-alert&#45;&#45;default" role="alert"><p>待审核<span>（</span><span class="account" style="color: #4fa5ff"></span><span>）</span></p></div>
+        <div class="m-portlet">
+            <div class="m-portlet__head">
+                <div class="m-portlet__head-caption">
+                    <div class="m-portlet__head-title">
+                        <h3 class="m-portlet__head-text">
+                            筛选查询
+                        </h3>
+                    </div>
+                </div>
+            </div>
+            <div class="m-portlet__body">
+                <div class="form-group m-form__group row">
+                    <label class="col-1 col-form-label text-right">类型：</label>
+                    <div class="col-2 text-left">
+                        <select class="form-control m-bootstrap-select m_selectpicker" name="type" id="type"
+                                style="opacity: 1">
+                            <option value="">全部</option>
+                            <option value="2">垃圾信息</option>
+                            <option value="1">内容不当</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="m-portlet">
+            <div class="m-portlet__head">
+                <div class="m-portlet__head-caption">
+                    <div class="m-portlet__head-title">
+                        <h3 class="m-portlet__head-text">
+                            数据列表
+                        </h3>
+                    </div>
+                </div>
+            </div>
+            <div class="m-portlet__body">
+                <table class="table table-bordered table-hover " id="pendList" width="100%">
+                    <thead>
+                    <tr>
+                        <th>举报编号</th>
+                        <th>举报人账号</th>
+                        <th>举报日期</th>
+                        <th>被举报帖子编号</th>
+                        <th>次数</th>
+                        <th>操作</th>
+                    </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
+<script>
+    var pendList = $('#pendList').DataTable({
+        "searchable": true,
+        "processing": true,
+        "ordering": true, //允许排序
+        "serverSide": true,
+        "stateSave": false,
+        "info": false,
+        "bLengthChange": true,
+        "oLanguage": { //国际语言转化
+            "sLengthMenu": "每页显示数量 _MENU_ ",
+            "sZeroRecords": "查询不到任何相关数据",
+            "sSearch": '',
+            "sSearchPlaceholder":"举报人",
+            "sEmptyTable": "暂无数据内容！",
+            "sLoadingRecords": "努力加载中...",
+            "sProcessing": "处理中...",
+            "oPaginate": {
+                "sPrevious": '上页',
+                "sNext": '下页'
+            }
+        },
+        ajax: {
+            url: contextPath + "/report/list",
+            dataSrc: function (json) {
+                if (json.reportListPage == null) {
+                    json.reportListPage = []
+                }
+                $('.account').html(json.recordsTotal)
+                return json.reportListPage
+            },
+            type: 'post',
+            data: function (data) {
+                data.status = 0;
+                data.reportType = $('#type').val();
+                console.debug(data);
+                return JSON.stringify(data);
+            },
+            dataType: "json",
+            processData: false,
+            contentType: 'application/json;charset=UTF-8'
+        },
+        "language": {
+            "url": "js/dataTables/chinese.lang.json"
+        },
+        "order": [2,"desc"],
+        "columns": [
+            {"data": "id"},
+            {"data": "account"},
+            {"data": "createTime"},
+            {"data": "postId"},
+            {"data": "reportedCount"},
+            {"data": "id"}
+        ],
+        "columnDefs": [{
+            orderable: false,
+            targets: [0, 1, 3, 4, 5]
+        }, {
+            "render": function (data, type, row) {
+                return '<a href="javascript:;" style="margin-right: 15px;" class="detail" data-id="' + data + '">审核</a>'
+            },
+            "targets": 5
+        },
+            {
+                "render": function (data, type, row) {
+                    return '<span>' + formatDate(data) + '</span>'
+                },
+                "targets": 2
+            },
+            {
+                "render": function (data, type, row) {
+                    return '<span>' + data + '</span>'
+                },
+                "targets": 3
+            }
+        ],
+        "drawCallback": function () {
+            $('#pendList thead th:first').removeClass('sorting_asc');
+            if ($('#pendList').find('tbody tr td').text() == '暂无数据内容！') {
+                $('#pendList_paginate').addClass('hide')
+            }
+        },
+        select: true
+    })
+    /*审核*/
+    $('#pendList tbody').on('click','.detail',function(){
+        window.sessionStorage['auditId'] = $(this).attr('data-id')
+        location.href = contextPath + '/system/report'
+    })
+    onload($('#type'),pendList)
+    function onload(dom, node) {
+      $(dom).on('change', function () {
+        node.ajax.reload();
+      })
+    }
+    /*转换时间格式*/
+    function formatDate(date) {
+        var oDate = new Date(date),
+            oYear = oDate.getFullYear(),
+            oMonth = oDate.getMonth() + 1,
+            oDay = oDate.getDate(),
+            oHour = oDate.getHours(),
+            oMin = oDate.getMinutes(),
+            oSen = oDate.getSeconds(),
+            oTime = oYear + '-' + getzf(oMonth) + '-' + getzf(oDay) + ' ' + getzf(oHour) + ':' + getzf(oMin) + ':' + getzf(oSen);//最后拼接时间
+        return oTime;
+    };
+    //补0操作
+    function getzf(num) {
+        if (parseInt(num) < 10) {
+            num = '0' + num;
+        }
+        return num;
+    }
+</script>
+
+
