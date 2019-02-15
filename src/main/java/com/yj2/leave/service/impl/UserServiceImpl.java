@@ -113,6 +113,8 @@ public class UserServiceImpl implements UserService {
         userRole.setRoleId(roleId);
         userRole.setCreateTime(new Date());
         userRoleMapper.insert(userRole);
+        //添加权限
+
     }
 
     @Override
@@ -141,20 +143,21 @@ public class UserServiceImpl implements UserService {
 
         List<Menu> menus = menuDefinedMapper.queryMenusByIds(menuIds);
 
-        for(Menu meun:menus){
+        /**
+         * 封装power
+         * 把menuIds赋给power
+         * 循环power show（）menus
+         *
+         */
+
+       /* for(Menu meun:menus){
             getFRes(meun,menus);//寻找资源的父节点(菜单头)
         }
-
-        //再一次循环构建资源的父子关系
-        /*menus.forEach(r -> {
-            if(r.getParentId() != null  && resourceMap.containsKey(r.getParentId())){
-                Menu meun = resourceMap.get(r.getParentId());
-                meun.getSub().add(r);
-            }
-        });*/
+        */
+       log.info("===菜单列表==="+menus.toString());
         return menus;
     }
-
+/*
     private void getFRes(Menu meun, List resources){
         if(meun.getParentId()!=null||!meun.getParentId().equals("1")){
             Menu father=menuMapper.selectByPrimaryKey(meun.getParentId());
@@ -170,6 +173,6 @@ public class UserServiceImpl implements UserService {
         }else{
             return;
         }
-    }
+    }*/
 
 }
