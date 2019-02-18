@@ -1,7 +1,6 @@
 package com.yj2.leave.controller;
 
 import com.alibaba.fastjson.JSON;
-import com.yj2.leave.entity.User;
 import com.yj2.leave.exception.ControllerException;
 import com.yj2.leave.exception.ExceptionEnum;
 import com.yj2.leave.service.UserService;

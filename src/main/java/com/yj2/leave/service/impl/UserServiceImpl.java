@@ -8,7 +8,6 @@ import com.yj2.leave.mapper.*;
 import com.yj2.leave.service.UserService;
 import com.yj2.leave.util.EncryDigestUtil;
 import com.yj2.leave.util.TokenUtil;
-import com.yj2.leave.util.UUIDUtil;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -95,7 +94,7 @@ public class UserServiceImpl implements UserService {
         }
         //添加用户
         User user = new User();
-        String userId = UUIDUtil.randomString();
+        String userId = "U-" + UUID.randomUUID().toString().replace("-", "");
 
         user.setId(userId);
         user.setAccount(account);
@@ -113,7 +112,6 @@ public class UserServiceImpl implements UserService {
         userRole.setRoleId(roleId);
         userRole.setCreateTime(new Date());
         userRoleMapper.insert(userRole);
-        //添加权限
 
     }
 
