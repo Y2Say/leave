@@ -91,7 +91,7 @@ dependencies {
     compile group: 'com.fasterxml.jackson.dataformat', name: 'jackson-dataformat-yaml', version: '2.9.2'
 
     //热部署
-    //compile ('org.springframework.boot:spring-boot-devtools')
+    compile ('org.springframework.boot:spring-boot-devtools')
 
     //mybatis分页插件
     //compile('tk.mybatis:mapper-spring-boot-starter:1.1.4')

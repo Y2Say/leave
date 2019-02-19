@@ -1,0 +1,12 @@
+.title{
+    font-family: "Microsoft YaHei UI";
+    font-size:22px;
+    margin:20px;
+}
+.choose_style{
+    width:58px !important;
+}
+.articleAdd_btn{
+    float:right;
+    margin-right:20px;
+}

@@ -41,9 +41,9 @@ public class PageController {
         return "common/login";
     }
 
-    @RequestMapping("/ceshi")
+    @RequestMapping("/article_detail")
     public String ceshi(){
-        return "common/ceshi";
+        return "article/article_detail";
     }
 
 
